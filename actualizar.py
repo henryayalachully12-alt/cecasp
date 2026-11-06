@@ -2,6 +2,8 @@
 import csv, io, json, os, re, time
 import datetime as dt
 import requests
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)   # silencia el aviso por verify=False
 
 BASE = "https://www.dps-promatic.com/webapps/gprsmeteo"
 STATION = os.getenv("STATION", "PERU")
@@ -18,6 +20,7 @@ def _descargar_una_vez(extra, limite):
         if r <= 0: raise TimeoutError("AWX tardó demasiado")
         return (10, min(30, r))          # (conexión, lectura)
     s = requests.Session(); s.headers["User-Agent"] = "EstacionMeteoProyecto/1.0"
+    s.verify = False   # el servidor de DPS-Promatic envía la cadena SSL incompleta
     s.get(BASE + "/demo_login.php", timeout=restante())             # acceso de invitado
     datos = {"AWS0": STATION, "datetype": 3, "action": "csv", "view": "0"}   # por defecto: últimos 7 días
     if extra: datos.update(extra)
@@ -86,4 +89,3 @@ def guardar(filas):
 
 if __name__ == "__main__":
     main()
-
