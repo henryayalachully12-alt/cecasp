@@ -228,12 +228,12 @@ fecha,id,cultivo,campo,dia_en_campo,etapa,kc,eto_mm,etc_mm,lamina_bruta_mm,compl
 2026-11-12,11,Pak choi,Campo Experimental 4,32,Media,1.05,2.85,2.99,3.32,False
 2026-11-12,13,Quinua,Campo Experimental 4,30,Desarrollo,0.58,2.85,1.65,1.83,False
 2026-11-12,14,Lechuga,Campo Experimental 2,30,Media,1.0,2.85,2.85,3.16,False
-2026-11-13,1,Berenjena,Campo Experimental 1,31,Desarrollo,0.637,5.01,3.19,3.55,False
-2026-11-13,4,Pepinillo,Campo Experimental 1,31,Desarrollo,0.962,5.01,4.82,5.35,False
-2026-11-13,5,Frijol,Campo Experimental 2,31,Desarrollo,0.806,5.01,4.04,4.49,False
-2026-11-13,6,Caupí,Campo Experimental 2,32,Desarrollo,0.774,5.01,3.88,4.31,False
-2026-11-13,9,Maní,Campo Experimental 3,32,Desarrollo,0.443,5.01,2.22,2.47,False
-2026-11-13,10,Nabo,Campo Experimental 3,31,Desarrollo,0.973,5.01,4.87,5.41,False
-2026-11-13,11,Pak choi,Campo Experimental 4,33,Media,1.05,5.01,5.26,5.84,False
-2026-11-13,13,Quinua,Campo Experimental 4,31,Desarrollo,0.594,5.01,2.97,3.3,False
-2026-11-13,14,Lechuga,Campo Experimental 2,31,Media,1.0,5.01,5.01,5.56,False
+2026-11-13,1,Berenjena,Campo Experimental 1,31,Desarrollo,0.637,5.04,3.21,3.57,False
+2026-11-13,4,Pepinillo,Campo Experimental 1,31,Desarrollo,0.962,5.04,4.85,5.38,False
+2026-11-13,5,Frijol,Campo Experimental 2,31,Desarrollo,0.806,5.04,4.06,4.51,False
+2026-11-13,6,Caupí,Campo Experimental 2,32,Desarrollo,0.774,5.04,3.9,4.33,False
+2026-11-13,9,Maní,Campo Experimental 3,32,Desarrollo,0.443,5.04,2.23,2.48,False
+2026-11-13,10,Nabo,Campo Experimental 3,31,Desarrollo,0.973,5.04,4.9,5.45,False
+2026-11-13,11,Pak choi,Campo Experimental 4,33,Media,1.05,5.04,5.29,5.87,False
+2026-11-13,13,Quinua,Campo Experimental 4,31,Desarrollo,0.594,5.04,2.99,3.32,False
+2026-11-13,14,Lechuga,Campo Experimental 2,31,Media,1.0,5.04,5.04,5.6,False
