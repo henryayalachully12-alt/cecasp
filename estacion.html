@@ -137,6 +137,282 @@ footer{background:var(--f9);color:var(--dm)}.copy{border-color:var(--dl)}.fc h3{
 .fl b{font-weight:400;letter-spacing:.42em;color:var(--sun)}.fl img{border-radius:8px}
 .ct2:hover{color:var(--sun)}
 @media(max-width:760px){.hero-in{min-height:0;padding:250px 20px 56px;grid-template-columns:1fr}.hero-in>div:first-child{grid-column:1}.hero::after{width:100%;height:260px;bottom:auto;-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent 100%);mask-image:linear-gradient(180deg,#000 55%,transparent 100%)}.hero::before{display:none}}
+
+/* ===== portada realista: foto real de la estación con luz según la hora y el clima ===== */
+.sx{position:relative;overflow:hidden;min-height:min(840px,calc(100svh - 72px));display:flex;flex-direction:column;justify-content:center;color:#fff;isolation:isolate;background:#0b1410}
+.sx-photo{position:absolute;inset:-3%;z-index:-8;background:url(img/estacion.jpg) 50% 40%/cover no-repeat;animation:kb 40s ease-in-out infinite alternate;transition:filter 1.2s}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.07) translate(-1%,.6%)}}
+.sx.dia .sx-photo{filter:saturate(1.08) contrast(1.06) brightness(.97)}
+.sx.gris .sx-photo{filter:saturate(.3) contrast(1) brightness(.9)}
+.sx.llueve .sx-photo{filter:saturate(.3) contrast(1.02) brightness(.58) blur(.8px)}
+.sx.alba .sx-photo,.sx.tarde .sx-photo{filter:saturate(.85) contrast(1.12) brightness(.7)}
+.sx.noche .sx-photo{filter:saturate(.35) contrast(1.15) brightness(.42)}
+/* gradación de color (como el filtro de una cámara) */
+.sx-grade{position:absolute;inset:0;z-index:-7;opacity:0;transition:opacity 1.2s}
+.sx.dia .sx-grade{opacity:.35;mix-blend-mode:soft-light;background:linear-gradient(180deg,#5aa0ff 0%,transparent 45%,#ffcf7a 100%)}
+.sx.alba .sx-grade{opacity:1;mix-blend-mode:overlay;background:linear-gradient(180deg,#4b3a8c 0%,#d9607a 30%,#ff9a4d 52%,#5c3a2a 100%)}
+.sx.tarde .sx-grade{opacity:1;mix-blend-mode:overlay;background:linear-gradient(180deg,#2d2a6b 0%,#c4456a 28%,#ff7a3a 50%,#4a2a20 100%)}
+.sx.noche .sx-grade{opacity:1;mix-blend-mode:multiply;background:linear-gradient(180deg,#4a6fb8 0%,#3f5c94 50%,#56677a 100%)}
+.sx.llueve .sx-grade{opacity:.9;mix-blend-mode:multiply;background:linear-gradient(180deg,#9aa6b2 0%,#b7c0c6 50%,#a49b8c 100%)}
+.sx.gris .sx-grade{opacity:.72;mix-blend-mode:multiply;background:linear-gradient(180deg,#9aa6b2 0%,#b7c0c6 50%,#a49b8c 100%)}
+/* estrellas: solo en el cielo, de noche */
+.sx-stars{position:absolute;inset:0 0 45% 0;z-index:-6;opacity:0;transition:opacity 1.2s;
+ -webkit-mask-image:linear-gradient(180deg,#000 40%,transparent);mask-image:linear-gradient(180deg,#000 40%,transparent);
+ background-image:radial-gradient(1.4px 1.4px at 20px 30px,#fff,transparent),radial-gradient(1px 1px at 90px 120px,rgba(255,255,255,.8),transparent),radial-gradient(1.3px 1.3px at 160px 60px,#fff,transparent),radial-gradient(.9px .9px at 230px 170px,#fff,transparent),radial-gradient(1.1px 1.1px at 300px 40px,#fff,transparent),radial-gradient(1px 1px at 60px 210px,rgba(255,255,255,.7),transparent),radial-gradient(.8px .8px at 270px 110px,#fff,transparent),radial-gradient(.8px .8px at 130px 190px,#fff,transparent);background-size:340px 250px}
+.sx.noche .sx-stars{opacity:1;animation:tw 4s ease-in-out infinite alternate}@keyframes tw{to{opacity:.5}}
+/* neblina / nubes difusas que pasan */
+.sx-haze{position:absolute;inset:0;z-index:-5;opacity:var(--haze,.2);transition:opacity 1.2s;pointer-events:none}
+.sx-haze i{position:absolute;width:70vw;height:38vh;border-radius:50%;background:radial-gradient(closest-side,rgba(236,240,244,.75),rgba(236,240,244,.25) 60%,transparent);filter:blur(30px);animation:hz 70s linear infinite}
+.sx-haze i:nth-child(1){top:2%;animation-delay:-10s}.sx-haze i:nth-child(2){top:18%;width:55vw;animation-duration:95s;animation-delay:-60s}.sx-haze i:nth-child(3){top:36%;height:26vh;animation-duration:120s;animation-delay:-35s;opacity:.7}
+@keyframes hz{from{transform:translateX(-75vw)}to{transform:translateX(110vw)}}
+.sx.noche .sx-haze i{background:radial-gradient(closest-side,rgba(120,135,160,.5),transparent)}
+.sx.alba .sx-haze i,.sx.tarde .sx-haze i{background:radial-gradient(closest-side,rgba(255,190,150,.55),transparent)}
+/* sol (o luna) con destello de lente */
+.sx-orb{position:absolute;z-index:-4;left:var(--x,80%);top:var(--y,30%);width:560px;height:560px;margin:-280px 0 0 -280px;pointer-events:none;mix-blend-mode:screen;transition:left 1.2s,top 1.2s,opacity 1.2s;
+ background:radial-gradient(circle,rgba(255,253,240,1) 0 2.6%,rgba(255,244,200,.75) 4.5%,rgba(255,224,150,.32) 12%,rgba(255,200,110,.12) 28%,transparent 58%);animation:glare 6s ease-in-out infinite alternate}
+@keyframes glare{to{transform:scale(1.06);filter:brightness(1.08)}}
+.sx-orb i{position:absolute;border-radius:50%;left:50%;top:50%;pointer-events:none}
+.sx-orb i:nth-child(1){width:90px;height:90px;margin:-45px;transform:translate(-210px,140px);background:radial-gradient(circle,rgba(160,220,255,0) 55%,rgba(160,220,255,.22) 66%,rgba(160,220,255,0) 74%)}
+.sx-orb i:nth-child(2){width:34px;height:34px;margin:-17px;transform:translate(-330px,220px);background:radial-gradient(circle,rgba(255,210,150,.28),transparent 70%)}
+.sx.gris .sx-orb{opacity:.38}.sx.gris .sx-orb i,.sx.llueve .sx-orb i,.sx.noche .sx-orb i{display:none}.sx.llueve .sx-orb{opacity:.18}
+.sx.alba .sx-orb,.sx.tarde .sx-orb{background:radial-gradient(circle,rgba(255,240,210,1) 0 2.8%,rgba(255,180,110,.75) 5%,rgba(255,130,70,.35) 14%,rgba(255,100,60,.14) 30%,transparent 60%)}
+.sx.noche .sx-orb{width:300px;height:300px;margin:-150px 0 0 -150px;mix-blend-mode:normal;animation:none;
+ background:radial-gradient(circle at 50% 50%,#fbf7e8 0 7.5%,rgba(235,240,255,.35) 9%,rgba(190,205,255,.12) 22%,transparent 55%)}
+/* lluvia: gotas finas generadas al azar */
+.sx-rain{position:absolute;inset:0;z-index:-3;display:none;overflow:hidden}
+.sx.llueve .sx-rain{display:block}
+.sx-rain b{position:absolute;top:-20%;width:1.2px;height:var(--l);background:linear-gradient(180deg,rgba(220,232,245,0),rgba(220,232,245,.6));transform:rotate(10deg);animation:fall var(--t) linear var(--dl) infinite;filter:blur(.3px)}
+@keyframes fall{to{transform:translate(-14vh,135vh) rotate(10deg)}}
+/* contraste: sombras suaves detrás del texto y de la temperatura, viñeta en los bordes */
+.sx-shade{position:absolute;inset:0;z-index:-2;pointer-events:none;
+ background:linear-gradient(90deg,rgba(4,10,7,.82) 0%,rgba(4,10,7,.6) 26%,rgba(4,10,7,.18) 50%,rgba(4,10,7,0) 62%),
+ radial-gradient(48% 62% at 84% 50%,rgba(4,10,7,.5),rgba(4,10,7,.18) 55%,transparent 75%),
+ linear-gradient(180deg,rgba(4,10,7,.6) 0%,rgba(4,10,7,0) 20%,rgba(4,10,7,0) 60%,rgba(4,10,7,.55) 100%);
+ box-shadow:inset 0 0 240px 40px rgba(0,0,0,.5)}
+/* difuminado hacia la sección de abajo */
+.sx-fade{position:absolute;left:0;right:0;bottom:-1px;height:90px;z-index:-1;pointer-events:none;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--bg) 55%,transparent) 60%,var(--bg))}
+.sx-in{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;padding:72px 20px 120px;width:100%}
+.sx .eyebrow{display:flex;align-items:center;gap:12px;margin:0 0 18px;font:600 12px/1.4 Inter,sans-serif;letter-spacing:.3em;text-transform:uppercase;color:#ffe08a;text-shadow:0 1px 10px rgba(0,0,0,.6)}
+.sx .eyebrow i{width:34px;height:2px;background:#ffe08a;flex:none}
+.sx h1{color:#fff;font:700 clamp(38px,5vw,64px)/1.02 Jost,sans-serif;letter-spacing:-.02em;max-width:12ch;margin:0;text-shadow:0 2px 6px rgba(0,0,0,.35),0 8px 40px rgba(0,0,0,.55)}
+.sx h1 em{font-style:normal;color:#ffd447}
+.sx .lead{font:500 1.14rem/1.6 Jost,sans-serif;color:#f3f6f4;max-width:42ch;margin:20px 0 24px;text-shadow:0 1px 3px rgba(0,0,0,.5),0 2px 18px rgba(0,0,0,.6)}
+.live{display:inline-flex;align-items:center;gap:10px;margin:0;padding:9px 16px;border:1px solid rgba(255,255,255,.22);background:rgba(8,18,13,.5);border-radius:99px;font:600 14px Inter,sans-serif;color:#fff;backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3)}
+.live::before{content:"";width:9px;height:9px;border-radius:50%;background:#4cd37e;animation:pl 1.6s infinite;flex:none}
+.live.late::before{background:#ffd447;animation:none}
+.hx-btns{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0 0}.hx-btns .btn{margin:0}
+.btn.ghost{background:rgba(8,18,13,.35);color:#fff;border-color:rgba(255,255,255,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}.btn.ghost:hover{background:rgba(255,255,255,.16)}
+.sx-now{justify-self:end;text-align:right;max-width:100%}
+.sx-lbl{font:600 12px Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.7)}
+.sx-t{font:700 clamp(112px,15vw,210px)/.86 Jost,sans-serif;letter-spacing:-.05em;color:#fff;margin-top:6px;white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.25),0 14px 60px rgba(0,0,0,.55)}
+.sx-t small{font-size:.42em;letter-spacing:-.02em;opacity:.92}.sx-t sup{font-size:.26em;vertical-align:top;position:relative;top:.35em;margin-left:.06em;color:#ffd447;letter-spacing:0}
+.sx-mm{display:flex;justify-content:flex-end;gap:16px;margin-top:10px;font:600 16px Inter,sans-serif;text-shadow:0 1px 10px rgba(0,0,0,.7)}.sx-mm b{font-weight:700}.sx-mm .lo b{color:#bfe3ff}.sx-mm .hi b{color:#ffc78f}
+.sx-cond{display:inline-flex;align-items:center;gap:14px;margin-top:18px;text-align:left;padding:10px 20px 10px 12px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(8,18,13,.38));border:1px solid rgba(255,255,255,.22);box-shadow:0 12px 34px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.2);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4)}
+.sx-cond svg{width:58px;height:58px;display:block;overflow:visible;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3))}
+.sx-cond b{display:block;font:700 24px/1.15 Jost,sans-serif;color:#fff}.sx-cond small{display:block;color:#e8efea;font:500 14px Inter,sans-serif}
+.sx-pills{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px;margin-top:14px}
+.sx-pill{display:flex;align-items:center;gap:9px;padding:9px 15px;border-radius:99px;background:rgba(8,18,13,.42);border:1px solid rgba(255,255,255,.2);box-shadow:0 8px 24px rgba(0,0,0,.22);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4)}
+.sx-pill svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.sx-pill span{font:600 11px Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;opacity:.9}.sx-pill b{font:700 17px Jost,sans-serif}
+.ray{transform-origin:32px 32px;animation:spinr 14s linear infinite}
+.drp line{animation:drop 1s linear infinite}.drp line:nth-child(2){animation-delay:.33s}.drp line:nth-child(3){animation-delay:.66s}
+@keyframes drop{from{transform:translateY(-4px);opacity:0}40%{opacity:1}to{transform:translateY(8px);opacity:0}}
+.flt{animation:flt 4s ease-in-out infinite alternate}@keyframes flt{to{transform:translateX(4px)}}
+@keyframes spinr{to{transform:rotate(360deg)}}
+.sx-down{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:#fff;text-decoration:none;font:600 11px Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.sx-down i{width:24px;height:38px;border:2px solid rgba(255,255,255,.75);border-radius:14px;position:relative}.sx-down i::after{content:"";position:absolute;left:50%;top:7px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:#fff;animation:mouse 1.6s infinite}
+@keyframes mouse{to{transform:translateY(12px);opacity:0}}
+/* ===== Última lectura: galería con transición de ruido (adaptada de Morph Gallery) ===== */
+.vx{background:var(--bg);padding:26px 0 80px;overflow-x:clip}
+.vx-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:18px 40px;margin-bottom:30px}
+.vx h2{font:700 clamp(32px,4vw,48px)/1.05 Jost,sans-serif;color:var(--ink);margin:16px 0 8px}.vx .sub{margin:0}
+.vx-note{max-width:40ch;margin:0;color:var(--mute);font-size:14.5px;border-left:3px solid var(--sun);padding-left:14px}
+.vx .wrap{max-width:1180px}
+.mg{position:relative;height:clamp(380px,54vh,470px);border-radius:26px;overflow:hidden;background:#0b1410;isolation:isolate;touch-action:pan-y;user-select:none;-webkit-user-select:none;
+ box-shadow:0 50px 90px -50px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.06)}
+.mg:focus-visible{outline:3px solid var(--sun);outline-offset:4px}
+.mg canvas,.mg-fb img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.mg canvas{opacity:0;transition:opacity .5s ease}.mg.ready canvas{opacity:1}
+.mg-fb img{object-fit:cover;opacity:0;transition:opacity .8s}.mg-fb img.on{opacity:1}
+.mg-shade{position:absolute;inset:0;z-index:1;pointer-events:none;
+ background:linear-gradient(90deg,rgba(4,10,7,.88) 0%,rgba(4,10,7,.66) 32%,rgba(4,10,7,.22) 58%,rgba(4,10,7,.12) 100%),
+ linear-gradient(180deg,rgba(4,10,7,.45) 0%,transparent 26%,transparent 58%,rgba(4,10,7,.8) 100%);box-shadow:inset 0 0 160px rgba(0,0,0,.45)}
+.mg-sl{position:absolute;inset:0;z-index:2;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:56px;align-items:center;padding:40px 88px;color:#fff;visibility:hidden;pointer-events:none}
+.mg-sl.on{visibility:visible;pointer-events:auto}
+.mg-sl .an{opacity:0;transform:translateY(22px);filter:blur(8px);transition:opacity .8s,transform .9s cubic-bezier(.2,.8,.2,1),filter .8s;transition-delay:0s}
+.mg-sl.on .an{opacity:1;transform:none;filter:none;transition-delay:calc(.55s + var(--d,0s))}
+.mg-k{display:inline-flex;align-items:center;gap:10px;padding:6px 16px 6px 6px;border-radius:99px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font:600 12px Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+.mg-k i{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--cc);color:#0b1410}
+.mg-k svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.mg-v{font:700 clamp(70px,7.5vw,116px)/.9 Jost,sans-serif;letter-spacing:-.045em;margin:22px 0 10px;white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.25),0 14px 50px rgba(0,0,0,.5)}
+.mg-v small{font-size:.3em;letter-spacing:0;margin-left:8px;color:var(--cc);font-weight:600}
+.mg-c{font:500 1.1rem/1.55 Jost,sans-serif;color:#e8eee9;max-width:38ch;margin:0;text-shadow:0 1px 12px rgba(0,0,0,.6)}
+.mg-p{justify-self:end;width:min(100%,380px);border-radius:24px;padding:8px 24px;background:linear-gradient(150deg,rgba(255,255,255,.16),rgba(8,18,13,.5));border:1px solid rgba(255,255,255,.2);
+ box-shadow:0 24px 60px rgba(0,0,0,.35),inset 0 1px rgba(255,255,255,.2);backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3)}
+.mg-r{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:14px 0;border-top:1px solid rgba(255,255,255,.14)}.mg-r:first-child{border-top:0}
+.mg-r span{color:#cfd8d3;font-size:14.5px}.mg-r b{font:700 19px Jost,sans-serif;white-space:nowrap;text-align:right}.mg-r b em{font-style:normal;color:var(--cc);font-weight:600}
+.mg-p .spk-w{padding:16px 0 12px}.mg-p .spk{height:92px}.mg-p .spk-t{position:static;display:block;margin-bottom:8px;color:#cfd8d3}.mg-p .spk-x{color:#aebbb3}
+.spk-w{position:relative;min-width:0}.spk{display:block;width:100%}.spk-x{display:flex;justify-content:space-between;font-size:11.5px;margin-top:6px}
+.spk-t{font:600 10px Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase}
+.mg-bar{height:8px;border-radius:99px;background:rgba(255,255,255,.18);margin:-4px 0 14px;overflow:hidden}.mg-bar i{display:block;height:100%;width:var(--w);border-radius:99px;background:var(--cc)}
+.mg-n{position:absolute;right:28px;top:22px;z-index:3;font:600 13px Inter,sans-serif;letter-spacing:.24em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.mg-n b{color:var(--sun)}
+.mg-ar{position:absolute;top:50%;z-index:3;width:50px;height:50px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;cursor:pointer;
+ transform:translateY(-50%);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:background .25s,transform .25s}
+.mg-ar:hover{background:rgba(255,255,255,.25)}.mg-ar:active{transform:translateY(-50%) scale(.94)}
+.mg-ar svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.mg-ar.prev{left:20px}.mg-ar.next{right:20px}
+.mg-tabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:16px}
+.mg-tab{position:relative;overflow:hidden;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 11px;align-items:center;text-align:left;padding:12px 14px;border-radius:18px;cursor:pointer;
+ border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;transition:border-color .3s,box-shadow .3s,transform .3s}
+.mg-tab:hover{transform:translateY(-2px)}
+.mg-tab i{grid-row:span 2;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--cc) 18%,transparent);color:var(--cc)}
+.mg-tab i svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.mg-tab span{font:600 10.5px Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mg-tab b{font:700 17px Jost,sans-serif;white-space:nowrap}
+.mg-tab::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--cc)}
+.mg-tab.on{border-color:var(--cc);box-shadow:0 14px 30px -18px var(--cc)}
+.mg-tab::after{display:none}.mg-tabs.auto .mg-tab.on::after{width:0;animation:tabp var(--ap,7s) linear forwards}.mg-tabs.auto.pause .mg-tab.on::after{animation-play-state:paused}
+@keyframes tabp{to{width:100%}}
+@media(max-width:1300px){.mg-ar.prev{left:22px}.mg-ar.next{right:22px}}
+@media(max-width:980px){.mg-sl{padding:48px 84px}.mg-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){
+ .mg{height:620px;border-radius:22px}
+ .mg-shade{background:linear-gradient(180deg,rgba(4,10,7,.5) 0%,rgba(4,10,7,.2) 22%,rgba(4,10,7,.6) 48%,rgba(4,10,7,.92) 100%)}
+ .mg-sl{grid-template-columns:1fr;align-content:end;gap:22px;padding:24px 20px 92px}
+ .mg-p{justify-self:stretch;width:auto;padding:4px 18px}.mg-r{padding:11px 0}.mg-c{font-size:1rem}
+ .mg-v{font-size:84px;margin:16px 0 8px}
+ .mg-ar{top:auto;bottom:22px;transform:none;width:46px;height:46px}.mg-ar:active{transform:scale(.94)}.mg-ar.prev{left:auto;right:76px}.mg-ar.next{right:20px}
+ .mg-n{top:auto;bottom:38px;left:22px;right:auto}
+ .mg-tabs{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}.mg-tab{flex:0 0 160px;scroll-snap-align:start}}
+@media(prefers-reduced-motion:reduce){.mg-sl .an{transition:none;filter:none}.mg-tabs.auto .mg-tab.on::after{animation:none;width:100%}}
+@media(max-width:980px){.vc{grid-column:span 3}.vc.w4,.vc.w6{grid-column:span 6}}
+@media(max-width:860px){.sx-in{grid-template-columns:1fr;gap:30px;padding:56px 20px 110px}.sx-now{justify-self:start;text-align:left}.sx-mm,.sx-pills{justify-content:flex-start}
+ .sx-shade{background:linear-gradient(180deg,rgba(4,10,7,.62) 0%,rgba(4,10,7,.45) 40%,rgba(4,10,7,.55) 70%,rgba(4,10,7,.75) 100%);box-shadow:inset 0 0 120px 20px rgba(0,0,0,.45)}.sx-photo{background-position:42% 40%}.sx-orb{--x:80%!important}}
+@media(max-width:700px){.vc,.vc.w4,.vc.w6{grid-column:1/-1}.ttwo{grid-template-columns:1fr;gap:20px}.eqp{grid-template-columns:auto 1fr}.eqs{border:0;padding:0}.vc{min-height:0}}
+@media(max-width:460px){.sx-t{font-size:104px}.sx-cond b{font-size:20px}.sx-pill{padding:8px 12px}.vv{font-size:64px}.vv.m{font-size:48px}.vc{padding:22px;border-radius:24px}.batt{width:124px}.sx-down{display:none}.vc.w6 .vh em{display:none}}
+@media(prefers-reduced-motion:reduce){.sx-photo,.sx-haze i,.sx-rain b,.sx-orb,.sx-stars,.ray,.drp line,.flt,.vc,.wave,.wave svg,.anemo .rt,.sunb .rt,.rainb,.sprout,.vbar i,.batt i,.dirc .ar,.sx-down i::after{animation:none!important}}
+
+
+
+.sx .sx-in{max-width:1280px;margin:0 auto;padding-left:clamp(20px,3vw,40px);padding-right:clamp(20px,3vw,40px)}
+
+/* ===== menú desplegable ===== */
+nav#menu{width:360px;padding:8px;gap:2px;border-radius:18px;top:calc(100% + 10px);background:rgba(11,22,17,.97);border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 60px rgba(0,0,0,.5);backdrop-filter:blur(14px)}
+nav#menu.open{animation:mnIn .25s cubic-bezier(.22,1,.36,1)}@keyframes mnIn{from{opacity:0;transform:translateY(-8px)}}
+nav#menu a{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:12px;color:#dfe7e2;transition:background .2s}
+nav#menu a i{flex:none;width:28px;font:600 11px Inter,sans-serif;font-style:normal;letter-spacing:.14em;color:#7f8f85}
+nav#menu a b{display:block;font:600 15px Inter,sans-serif;color:#fff}nav#menu a small{display:block;margin-top:2px;font:400 12.5px Inter,sans-serif;color:#8a9a90}
+nav#menu a:hover{background:rgba(255,255,255,.05)}nav#menu a.on{background:rgba(255,212,71,.08);box-shadow:inset 3px 0 #ffd447}nav#menu a.on i{color:#ffd447}
+@media(max-width:600px){nav#menu{width:auto;top:100%;border-radius:0 0 18px 18px}}
+/* ===== vistas: resumen, gráficas y novedades (mismo estilo oscuro que la portada) ===== */
+.s.view.dv{min-height:calc(100vh - 72px);padding:56px 0 90px;border:0;color:#dbe3dd;
+ background:radial-gradient(1000px 500px at 85% 0%,rgba(47,115,80,.26),transparent 60%),radial-gradient(800px 500px at 0% 100%,rgba(184,134,46,.12),transparent 60%),#0b1611}
+.dv .wrap{max-width:1180px}
+.dv-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:18px 40px;margin-bottom:28px}
+.dv .tag2{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14);color:#8fc7a4}
+.dv h2{font:700 clamp(32px,4vw,48px)/1.05 Jost,sans-serif;color:#fff;margin:16px 0 8px;letter-spacing:-.01em}.dv h2 b{font-weight:700;color:#ffd447}
+.dv .sub{color:#a9b8ae;margin:0;font-size:15px;max-width:62ch}
+.dv-link{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:99px;border:1px solid rgba(255,255,255,.2);color:#fff;text-decoration:none;font:600 13px Inter,sans-serif;transition:border-color .2s,background .2s}
+.dv-link:hover{border-color:#ffd447;background:rgba(255,212,71,.08)}.dv-link span{color:#ffd447;transition:transform .2s}.dv-link:hover span{transform:translateX(4px)}
+/* resumen */
+.rs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.rs{position:relative;overflow:hidden;border-radius:24px;padding:24px 26px 0;background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.018));border:1px solid rgba(255,255,255,.09);transition:transform .35s,border-color .35s;animation:up .7s cubic-bezier(.2,.8,.2,1) both}
+.rs:nth-child(2){animation-delay:.07s}.rs:nth-child(3){animation-delay:.14s}.rs:nth-child(4){animation-delay:.21s}
+@keyframes up{from{opacity:0;transform:translateY(22px)}}
+.rs::before{content:"";position:absolute;width:260px;height:260px;right:-90px;top:-110px;border-radius:50%;background:radial-gradient(circle,var(--cc),transparent 70%);opacity:.16;pointer-events:none}
+.rs:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--cc) 50%,transparent)}
+.rs-h{display:flex;align-items:center;gap:12px}
+.rs-h i{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--cc) 18%,transparent);border:1px solid color-mix(in srgb,var(--cc) 45%,transparent);color:var(--cc)}
+.rs-h svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rs-h h3{margin:0;font:600 19px Jost,sans-serif;color:#fff}.rs-h em{margin-left:auto;font:600 10px Inter,sans-serif;font-style:normal;letter-spacing:.18em;text-transform:uppercase;color:#7f8f85}
+.rs-big{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:18px 0 4px}.rs-big b{font:700 54px/1 Jost,sans-serif;color:#fff;letter-spacing:-.02em}
+.rs-big small{font:600 18px Jost,sans-serif;color:var(--cc)}.rs-big span{flex-basis:100%;font:600 10.5px Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#8a9a90}
+.rs-bar{position:relative;height:8px;border-radius:99px;background:rgba(255,255,255,.1);margin:18px 0 8px}.rs-bar i{position:absolute;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,color-mix(in srgb,var(--cc) 55%,#fff),var(--cc));box-shadow:0 0 12px color-mix(in srgb,var(--cc) 50%,transparent)}
+.rs-mm{display:flex;justify-content:space-between;font-size:13px;color:#8a9a90}.rs-mm b{color:#fff;font:600 15px Jost,sans-serif;margin-left:4px}
+.rs-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:11px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14.5px;color:#a9b8ae}.rs-row:first-of-type{margin-top:14px}
+.rs-row b{color:#fff;font:600 18px Jost,sans-serif;white-space:nowrap}.rs-row em{font-style:normal;font-size:11px;border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:1px 7px;margin-left:6px;color:#8a9a90}
+.rs-spk{display:block;width:calc(100% + 52px);height:70px;margin:16px -26px 0}
+/* gráficas */
+.dv .tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:end;padding:14px;margin:0 0 16px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+.dv .tools label,.dv .tools .plab{display:grid;gap:7px;font:600 10.5px Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#8a9a90}
+.dv select{appearance:none;-webkit-appearance:none;width:100%;padding:12px 40px 12px 14px;border-radius:12px;cursor:pointer;font:500 15px Inter,sans-serif;letter-spacing:0;text-transform:none;color:#fff;border:1px solid rgba(255,255,255,.12);
+ background:#13231b url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffd447' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") right 14px center/14px no-repeat;transition:border-color .2s}
+.dv select:hover,.dv select:focus{border-color:#ffd447;outline:none}.dv select option{background:#13231b;color:#fff}
+.dv .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:0 0 14px}.dv .stats:empty{display:none}
+.dv .stats span{display:flex;flex-direction:column;gap:6px;padding:14px 18px;border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);font:600 10.5px Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8a9a90}
+.dv .stats b{font:700 26px/1.1 Jost,sans-serif;letter-spacing:0;text-transform:none;color:#fff}
+.dv #hint{margin:0 0 14px;padding-left:12px;border-left:2px solid #ffd447;font-size:14px;color:#a9b8ae}.dv #hint:empty{display:none}
+.dv .chart{height:420px;padding:18px 18px 12px;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.09)}
+.dv-bh{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 20px;margin:44px 0 12px}
+.dv-bh h3{margin:0;font:700 26px Jost,sans-serif;color:#fff}.dv-bh span{font-size:13.5px;color:#8a9a90}
+.dv .scroll{margin:0;max-height:520px;overflow:auto;scrollbar-color:rgba(255,255,255,.22) transparent;scrollbar-width:thin;border-radius:20px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025)}
+.dv table{color:#dbe3dd;font-size:14px}
+.dv th{position:sticky;top:0;z-index:2;background:#16281f;color:#a9b8ae;font:600 11px/1.3 Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.12);padding:12px}
+.dv th small{color:#7f8f85;letter-spacing:0;text-transform:none;font-weight:400}
+.dv td{border-bottom:1px solid rgba(255,255,255,.06);padding:10px 12px}
+.dv tbody tr:nth-child(even) td{background:rgba(255,255,255,.022)}.dv tbody tr:hover td{background:rgba(255,212,71,.07)}
+.dv td:first-child{position:sticky;left:0;z-index:1;background:#12221a;color:#fff;font-weight:600;white-space:nowrap}.dv th:first-child{z-index:3;background:#16281f}
+.dv tbody tr:nth-child(even) td:first-child{background:#142519}
+.dv-note{margin:0 0 4px;color:#a9b8ae;font-size:14.5px;max-width:80ch}
+.dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+.dl{display:flex;align-items:center;gap:14px;padding:18px;border-radius:18px;text-decoration:none;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);transition:transform .3s,border-color .3s}
+.dl:hover{transform:translateY(-3px);border-color:#ffd447}
+.dl i{flex:none;width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:rgba(255,212,71,.12);color:#ffd447}
+.dl svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dl b{display:block;font:600 17px Jost,sans-serif;color:#fff}.dl small{display:block;margin-top:2px;font-size:12.5px;line-height:1.4;color:#8a9a90}
+.dl em{margin-left:auto;font-style:normal;font-size:20px;color:#ffd447;transition:transform .3s}.dl:hover em{transform:translateY(3px)}
+/* novedades */
+.nv-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:28px;align-items:start}
+.nv-side p{margin:0 0 6px;color:#a9b8ae;font-size:15.5px;line-height:1.6}
+.soc{display:flex;align-items:center;gap:14px;margin-top:14px;padding:18px;border-radius:18px;text-decoration:none;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);transition:transform .3s,border-color .3s}
+.soc:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.3)}
+.soc i{flex:none;width:50px;height:50px;border-radius:14px;display:grid;place-items:center;color:#fff}.soc.fb i{background:#1877f2}.soc.ig i{background:linear-gradient(45deg,#f9a63a,#e1306c,#7a3bd1)}
+.soc svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.soc.fb svg{fill:currentColor;stroke:none}
+.soc b{display:block;font:600 17px Jost,sans-serif;color:#fff}.soc small{display:block;font-size:13px;color:#8a9a90}.soc em{margin-left:auto;font-style:normal;color:#ffd447;font-size:18px}
+.nv-feed{display:flex;justify-content:center;min-height:320px;padding:14px;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.09)}
+.nv-feed #fb{width:100%;display:flex;justify-content:center}.dv .fbw{border-radius:14px}
+.dv .fb-card{color:#dbe3dd}.dv .fb-card b{color:#fff}.dv .fb-card p{color:#a9b8ae}
+@media(max-width:820px){.rs-grid,.nv-grid{grid-template-columns:1fr}.dv .chart{height:340px;padding:12px 8px 8px}.rs-big b{font-size:46px}}
+
+/* ===== pie de página (mismo diseño y logos que la página principal) ===== */
+footer.sf{background:#0e1a14;color:#a9b8ae;padding:64px 0 28px;font-size:.84rem;border:0}
+footer.sf .fg{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+footer.sf h4{font:600 1.02rem/1 Jost,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#c8b38a;margin:0 0 20px}
+footer.sf a{display:block;text-decoration:none;color:#dfe7e2;padding:4px 0}footer.sf a:hover{color:#c8b38a}
+footer.sf .fb2{display:flex;align-items:center;gap:14px;margin-bottom:18px}footer.sf .fb2 img{height:50px;background:#fff;border-radius:8px;padding:4px 6px}
+footer.sf .fb2 span{font:600 1.35rem/1 Jost,sans-serif;letter-spacing:.32em;color:#c8b38a}
+footer.sf .ctl{display:flex;align-items:center;gap:12px;padding:6px 0;overflow-wrap:anywhere}
+footer.sf .ctl i{flex:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center}footer.sf .ctl svg{width:20px;height:20px}
+footer.sf .ctl .gm{background:#fff}footer.sf .ctl .fbk{background:#1877f2}footer.sf .ctl .ins{background:radial-gradient(circle at 30% 107%,#fdf497 0,#fd5949 45%,#d6249f 60%,#285aeb 90%)}footer.sf .ctl .wsp{background:#25d366}
+footer.sf .ctl .fbk svg,footer.sf .ctl .wsp svg{fill:#fff}footer.sf .ctl .ins svg{fill:none;stroke:#fff;stroke-width:2}
+footer.sf .copy{border-top:1px solid rgba(255,255,255,.12);margin:50px 0 0;padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:.76rem}
+@media(max-width:760px){footer.sf .fg{grid-template-columns:1fr}}
+/* ===== menú más compacto, pegado al botón ===== */
+nav#menu{width:320px;padding:6px;top:calc(100% - 6px)}
+nav#menu a{gap:12px;padding:9px 12px}nav#menu a b{font-size:14.5px}nav#menu a small{font-size:12px;margin-top:1px}
+/* ===== gráficas: pestañas de tipo y periodo, encabezado ===== */
+.ctabs{display:flex;gap:6px;padding:6px;margin:0 0 14px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none}
+.ctab{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 14px;border:0;border-radius:13px;background:none;cursor:pointer;color:#a9b8ae;font:500 13.5px Inter,sans-serif;white-space:nowrap;transition:background .25s,color .25s}
+.ctab svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ctab:hover{color:#fff;background:rgba(255,255,255,.05)}.ctab.on{background:#ffd447;color:#0b1611;font-weight:600}
+.dv .tools{grid-template-columns:minmax(0,1fr) auto;align-items:end}
+.dv .tools .kindsel{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.pchips{display:flex;gap:6px;flex-wrap:wrap}.pchips button{padding:11px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#13231b;color:#dfe7e2;font:500 14px Inter,sans-serif;cursor:pointer;transition:all .2s}
+.pchips button:hover{border-color:#ffd447}.pchips button.on{background:rgba(255,212,71,.14);border-color:#ffd447;color:#ffd447}
+.dv .tools .perl{display:grid;gap:7px}.dv .tools .perl select{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.dv #pw[hidden]+.perl{grid-column:1/-1}
+.cbox{border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.09);overflow:hidden}
+.chead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 20px;padding:18px 22px 4px}
+.chead b{display:block;font:700 22px Jost,sans-serif;color:#fff}.chead span{font-size:13px;color:#8a9a90}
+.chead em{font-style:normal;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:99px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);font:600 11px Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#8fc7a4}
+.chead em::before{content:"";width:7px;height:7px;border-radius:50%;background:#4cd37e}
+.cbox .chart{border:0;background:none;border-radius:0}
+/* ===== tabla: color según el valor y marcas de máximo y mínimo ===== */
+.dv td.mx::after,.dv td.mn::after{font-size:9px;margin-left:4px;vertical-align:1px}.dv td.mx::after{content:"▲";color:#ff9a4a}.dv td.mn::after{content:"▼";color:#5ab4ff}
+.tleg{display:flex;flex-wrap:wrap;gap:6px 16px;margin:-4px 0 12px;font-size:12.5px;color:#8a9a90}.tleg i{font-style:normal}.tleg .u{color:#ff9a4a}.tleg .d{color:#5ab4ff}
+.tleg .g{display:inline-block;width:46px;height:8px;border-radius:99px;vertical-align:middle;margin-right:6px;background:linear-gradient(90deg,rgba(255,154,74,.08),rgba(255,154,74,.4))}
+@media(max-width:820px){.dv .stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.dv .stats span{padding:10px 12px;font-size:9.5px;letter-spacing:.1em}.dv .stats b{font-size:18px}.dv .tools{grid-template-columns:1fr}.ctab span{display:none}.ctab.on span{display:inline}}
 </style>
 </head>
 <body>
@@ -146,63 +422,102 @@ footer{background:var(--f9);color:var(--dm)}.copy{border-color:var(--dl)}.fc h3{
 <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".9" fill="#fff" stroke="none"/></symbol>
 </defs></svg>
 <header class="bar"><div class="wrap bar-in">
- <a class="brand" href="#inicio" title="Centro de Experimentación y Capacitación en Agricultura Sostenible y de Precisión"><img src="logo.png" alt="Logo del CECASP"><span><b>CECASP</b><small>Estación meteorológica · Piura, Perú</small></span></a>
+ <a class="brand" href="index.html#inicio" title="Ir a la página principal del CECASP"><img src="logo.png" alt="Logo del CECASP"><span><b>CECASP</b><small>Estación meteorológica · Piura, Perú</small></span></a>
  <button class="menu-btn" id="mb" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú"><i><b></b><b></b><b></b></i><span>Menú</span></button>
- <nav id="menu" aria-label="Menú principal"><a href="#inicio" data-v="inicio">Inicio</a><a href="#resumen" data-v="resumen">Resumen del día</a><a href="#parametros" data-v="parametros">Parámetros y gráficas</a><a href="#novedades" data-v="novedades">Novedades</a><a href="#proyecto" data-v="proyecto">Sobre el CECASP</a><a href="index.html">← Volver al CECASP</a></nav>
+ <nav id="menu" aria-label="Menú principal">
+  <a href="#inicio" data-v="inicio"><i>01</i><span><b>Inicio</b><small>Clima ahora y última lectura</small></span></a>
+  <a href="#resumen" data-v="resumen"><i>02</i><span><b>Resumen del día</b><small>Máximas, mínimas y promedios de hoy</small></span></a>
+  <a href="#parametros" data-v="parametros"><i>03</i><span><b>Parámetros y gráficas</b><small>Gráficas, registro y descargas</small></span></a>
+  <a href="#novedades" data-v="novedades"><i>04</i><span><b>Novedades</b><small>Lo último en nuestras redes</small></span></a>
+ </nav>
 </div></header>
 
-<div class="view" id="inicio"><section class="hero"><div class="wrap hero-in">
- <div><p class="eyebrow">Estación meteorológica · Piura, Perú</p>
- <h1>El clima de la estación, al día</h1>
- <p class="lead">Datos reales medidos por la estación del proyecto: lo que pasa hoy y cómo ha cambiado en los últimos días.</p>
- <p class="pill" id="estado">Cargando datos…</p><p><a class="btn sun" href="#resumen">Ver resumen del día</a></p></div>
- <div class="now" hidden><span>Temperatura ahora</span><div class="big" id="bigT">–<small>°C</small></div><p id="mm"></p><p>La estación envía una lectura cada 30 minutos</p></div>
-</div></section>
-<div class="wrap lect"><span class="tag2"><em></em>Datos en vivo</span><h2>Última lectura</h2><p class="sub" id="lr"></p><div class="gcards" id="cards"></div></div></div>
-
-<section class="s view" id="resumen"><div class="wrap"><h2>Resumen del día</h2><p class="sub" id="tnote"></p><div class="today" id="today"></div></div></section>
-
-<section class="s view" id="parametros"><div class="wrap"><h2>Parámetros y gráficas</h2><p class="sub">Elige el parámetro y el periodo que quieres ver.</p>
-<div class="tools">
- <label>Tipo de gráfica<select id="kind"><option value="line">Evolución en el tiempo</option><option value="daily">Resumen diario de temperatura</option><option value="dual">Temperatura y humedad</option><option value="rose">Rosa de los vientos</option><option value="rain">Lluvia por día</option><option value="eto">Evapotranspiración de referencia (ETo)</option><option value="etc">Agua que necesita cada cultivo (ETc)</option></select></label>
- <label id="pw">Parámetro<select id="par"></select></label>
- <label>Periodo<select id="per"><option value="1" selected>Hoy</option><option value="7">Últimos 7 días</option></select></label>
-</div>
-<div class="stats" id="stats"></div><p class="sub" id="hint" style="margin:0 0 12px"></p>
-<div class="chart"><canvas id="ch" aria-label="Gráfica del parámetro elegido"></canvas></div>
-<h3 style="font-size:22px;margin:28px 0 0">Registro de lecturas</h3>
-<div class="scroll" style="margin-top:12px"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
-<h3 style="font-size:22px;margin:28px 0 0">Descargar datos históricos</h3>
-<p class="sub" style="margin:6px 0 12px">Las gráficas de lecturas muestran hasta 30 días; la ETo y la ETc pueden verse hasta todo el historial. Para trabajar con los datos, descarga los archivos (se abren en Excel). Lecturas: una cada 30 minutos desde octubre de 2024, con todos los parámetros de la estación. ETo: un valor por día desde octubre de 2024. ETc: por cultivo, desde el día en que cada lote entró al campo.</p>
-<p style="display:flex;flex-wrap:wrap;gap:10px;margin:0"><a class="btn" href="data/lecturas.csv" download>Todas las lecturas (CSV)</a><a class="btn" href="data/diario.csv" download>ETo diaria (CSV)</a><a class="btn" href="data/etc_diaria.csv" download>ETc por cultivo (CSV)</a></p>
-</div></section>
-
-<section class="s view" id="novedades"><div class="wrap"><h2>Novedades</h2><p class="sub">Lo último que publicamos en Facebook. También estamos en Instagram.</p>
-<div class="fbcol"><article class="card"><div id="fb"></div></article><p style="margin-top:14px"><a class="btn" href="https://www.facebook.com/profile.php?id=61556795847342" target="_blank" rel="noopener">Abrir en Facebook</a> <a class="btn" href="https://www.instagram.com/agrososteniblepiura/" target="_blank" rel="noopener">Ver Instagram</a></p></div></div></section>
-
-<section class="s view" id="proyecto"><div class="wrap"><h2>Sobre el CECASP</h2>
-<div class="two">
- <div><p>El CECASP (Centro de Experimentación y Capacitación en Agricultura Sostenible y de Precisión) es un centro de Piura, Perú. Esta página reúne los datos de su estación meteorológica: el clima de hoy, el registro histórico y gráficas para analizar periodos concretos.</p></div>
- <div><h3 style="font-size:18px;margin-bottom:8px">Qué mide la estación</h3><ul><li>Temperatura del aire: media, mínima y máxima del día</li><li>Humedad relativa: media, mínima y máxima del día</li><li>Punto de rocío y presión atmosférica</li><li>Viento: velocidad media, mínima y ráfaga máxima; dirección y su constancia</li><li>Radiación solar</li><li>Precipitación: por intervalo y total diario</li><li>Suelo: temperatura y humedad</li><li>Humedad de la hoja</li><li>Equipo: voltaje de la batería</li></ul></div>
-</div></div></section>
-
-
-
-<footer id="contacto"><div class="wrap">
- <div class="fgrid">
-  <div class="fl"><img src="logo.png" alt="Logo del CECASP"><div><b>CECASP</b><span>Centro de Experimentación y Capacitación en Agricultura Sostenible y de Precisión · Piura, Perú</span></div></div>
-  <div class="fc"><h3>Contacto</h3>
-   <a class="ct2" href="mailto:agrososteniblepiura@gmail.com"><span class="ic mail"><svg><use href="#i-mail"/></svg></span>agrososteniblepiura@gmail.com</a>
-   <a class="ct2" href="https://www.facebook.com/profile.php?id=61556795847342" target="_blank" rel="noopener"><span class="ic fb"><svg><use href="#i-fb"/></svg></span>Síguenos en Facebook</a>
-   <a class="ct2" href="https://www.instagram.com/agrososteniblepiura/" target="_blank" rel="noopener"><span class="ic ig"><svg><use href="#i-ig"/></svg></span>@agrososteniblepiura</a></div>
+<div class="view" id="inicio"><section class="sx dia" id="sx">
+ <div class="sx-photo" aria-hidden="true"></div><div class="sx-grade" aria-hidden="true"></div><div class="sx-stars" aria-hidden="true"></div>
+ <div class="sx-haze" aria-hidden="true"><i></i><i></i><i></i></div><div class="sx-orb" id="orb" aria-hidden="true"><i></i><i></i></div>
+ <div class="sx-rain" id="rain" aria-hidden="true"></div><div class="sx-shade" aria-hidden="true"></div><div class="sx-fade" aria-hidden="true"></div>
+ <div class="wrap sx-in">
+  <div class="sx-txt"><p class="eyebrow"><i></i>Estación meteorológica · Piura, Perú</p>
+  <h1>El clima de la estación, <em>al día</em></h1>
+  <p class="lead">Datos reales medidos por la estación del proyecto: lo que pasa hoy y cómo ha cambiado en los últimos días.</p>
+  <p class="live" id="estado">Cargando datos…</p>
+  <p class="hx-btns"><a class="btn sun" href="#resumen">Ver resumen del día</a><a class="btn ghost" href="#parametros">Ver gráficas</a></p></div>
+  <div class="sx-now" aria-live="polite"><div class="sx-lbl">Ahora en el CECASP · <span id="hAhora">–</span></div>
+   <div class="sx-t" id="bigT">–</div><div class="sx-mm" id="mmT"></div>
+   <div class="sx-cond"><span id="condI"></span><div><b id="cond">Cargando…</b><small id="condX"></small></div></div>
+   <div class="sx-pills" id="pills"></div></div>
  </div>
- <p class="copy">© CECASP · Centro de Experimentación y Capacitación en Agricultura Sostenible y de Precisión · Datos de la estación vía DPS-Promatic.</p>
+ <a class="sx-down" href="#lect" aria-label="Bajar a la última lectura"><span>Última lectura</span><i></i></a>
+</section>
+
+<section class="vx" id="lect"><div class="wrap">
+ <div class="vx-head"><div><span class="tag2"><em></em>Datos en vivo</span><h2>Última lectura</h2><p class="sub" id="lr"></p></div>
+ <p class="vx-note">Recorre los seis grupos de mediciones con las flechas, deslizando o con las pestañas de abajo. Fotos: Unsplash.</p></div>
+ <div class="mg" id="mg" tabindex="0" role="region" aria-roledescription="carrusel" aria-label="Última lectura por grupo de mediciones">
+  <canvas aria-hidden="true"></canvas><div class="mg-fb" aria-hidden="true"></div><div class="mg-shade" aria-hidden="true"></div>
+  <div id="mgSlides"></div>
+  <span class="mg-n" id="mgN">01 / 06</span>
+  <button class="mg-ar prev" type="button" aria-label="Grupo anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
+  <button class="mg-ar next" type="button" aria-label="Grupo siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
+ </div>
+ <div class="mg-tabs" id="mgTabs" role="tablist" aria-label="Grupos de mediciones"></div>
+</div></section></div>
+
+<section class="s view dv" id="resumen"><div class="wrap">
+ <div class="dv-head"><div><span class="tag2"><em></em>Hoy en el campo</span><h2>Resumen <b>del día</b></h2><p class="sub" id="tnote"></p></div><a class="dv-link" href="#parametros">Ver gráficas <span>→</span></a></div>
+ <div class="rs-grid" id="today"></div>
+</div></section>
+
+<section class="s view dv" id="parametros"><div class="wrap">
+ <div class="dv-head"><div><span class="tag2"><em></em>Explora los datos</span><h2>Parámetros <b>y gráficas</b></h2><p class="sub">Elige el tipo de gráfica, el parámetro y el periodo que quieres ver.</p></div></div>
+ <div class="ctabs" id="ctabs" role="tablist" aria-label="Tipo de gráfica"></div>
+ <div class="tools">
+  <label class="kindsel">Tipo de gráfica<select id="kind"><option value="line">Evolución en el tiempo</option><option value="daily">Resumen diario de temperatura</option><option value="dual">Temperatura y humedad</option><option value="rose">Rosa de los vientos</option><option value="rain">Lluvia por día</option><option value="eto">Evapotranspiración de referencia (ETo)</option><option value="etc">Agua que necesita cada cultivo (ETc)</option></select></label>
+  <label id="pw">Parámetro<select id="par"></select></label>
+  <div class="perl"><span class="plab">Periodo</span><div class="pchips" id="pchips" role="radiogroup" aria-label="Periodo"></div><select id="per" aria-label="Periodo"><option value="1" selected>Hoy</option><option value="7">Últimos 7 días</option></select></div>
+ </div>
+ <div class="stats" id="stats"></div><p class="sub" id="hint"></p>
+ <div class="cbox"><div class="chead"><div><b id="ctitle">Gráfica</b><span id="csub"></span></div><em>Datos de la estación</em></div><div class="chart"><canvas id="ch" aria-label="Gráfica del parámetro elegido"></canvas></div></div>
+ <div class="dv-bh"><h3>Registro de lecturas</h3><span>Las 60 lecturas más recientes del periodo elegido</span></div>
+ <p class="tleg"><span><i class="g"></i>más intenso = valor más alto</span><span><i class="u">▲</i> máximo de la tabla</span><span><i class="d">▼</i> mínimo de la tabla</span></p>
+ <div class="scroll"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+ <div class="dv-bh"><h3>Descargar datos históricos</h3><span>Se abren en Excel</span></div>
+ <p class="dv-note">Las gráficas de lecturas muestran hasta 30 días; la ETo y la ETc pueden verse con todo el historial. Para trabajar con los datos completos, descarga los archivos.</p>
+ <div class="dl-grid">
+  <a class="dl" href="data/lecturas.csv" download><i><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></i><span><b>Todas las lecturas</b><small>Una cada 30 min desde oct. 2024 · todos los parámetros</small></span><em>↓</em></a>
+  <a class="dl" href="data/diario.csv" download><i><svg viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg></i><span><b>ETo diaria</b><small>Un valor por día desde oct. 2024</small></span><em>↓</em></a>
+  <a class="dl" href="data/etc_diaria.csv" download><i><svg viewBox="0 0 24 24"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></i><span><b>ETc por cultivo</b><small>Desde que cada lote entró al campo</small></span><em>↓</em></a>
+ </div>
+</div></section>
+
+<section class="s view dv" id="novedades"><div class="wrap">
+ <div class="dv-head"><div><span class="tag2"><em></em>Redes del CECASP</span><h2>Últimas <b>novedades</b></h2><p class="sub">Lo último que publicamos: visitas, talleres, cosechas y avances del centro.</p></div></div>
+ <div class="nv-grid">
+  <div class="nv-side">
+   <p>Síguenos para enterarte de las actividades del CECASP y de lo que pasa en el campo cada semana.</p>
+   <a class="soc fb" href="https://www.facebook.com/profile.php?id=61556795847342" target="_blank" rel="noopener"><i><svg viewBox="0 0 24 24"><use href="#i-fb"/></svg></i><span><b>Facebook</b><small>Publicaciones y fotos del centro</small></span><em>↗</em></a>
+   <a class="soc ig" href="https://www.instagram.com/agrososteniblepiura/" target="_blank" rel="noopener"><i><svg viewBox="0 0 24 24"><use href="#i-ig"/></svg></i><span><b>Instagram</b><small>@agrososteniblepiura</small></span><em>↗</em></a>
+  </div>
+  <article class="nv-feed"><div id="fb"></div></article>
+ </div>
+</div></section>
+
+<footer id="contacto" class="sf"><div class="wrap"><div class="fg">
+<div><div class="fb2"><img src="img/logo.jpg" alt=""><span>CECASP</span></div><p style="max-width:380px;margin:0">Centro de Experimentación y Capacitación en Agricultura Sostenible y de Precisión. Proyecto realizado por la IILA con financiamiento de la Cooperación italiana, en la Universidad Nacional de Piura.</p></div>
+<div><h4>Explora</h4><a href="index.html#inicio">Página principal</a><a href="#resumen">Resumen del día</a><a href="#parametros">Gráficas y datos</a><a href="index.html#visitas">Agendar visita</a></div>
+<div><h4>Contacto</h4>
+<a class="ctl" href="mailto:agrososteniblepiura@gmail.com"><i class="gm"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#4caf50" d="M45 16.2l-5 2.75-5 4.75V40h7c1.66 0 3-1.34 3-3V16.2z"/><path fill="#1e88e5" d="M3 16.2l3.61 1.71L13 23.7V40H6c-1.66 0-3-1.34-3-3V16.2z"/><path fill="#e53935" d="M35 11.2l-11 8.25-11-8.25-1 5.8 1 6.7 11 8.25 11-8.25 1-6.7z"/><path fill="#c62828" d="M3 12.3v3.9l10 7.5V11.2L9.88 8.86A4.24 4.24 0 0 0 3 12.24z"/><path fill="#fbc02d" d="M45 12.3v3.9l-10 7.5V11.2l3.12-2.34A4.24 4.24 0 0 1 45 12.24z"/></svg></i>agrososteniblepiura@gmail.com</a>
+<a class="ctl" href="https://www.facebook.com/profile.php?id=61556795847342" target="_blank" rel="noopener noreferrer"><i class="fbk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.2 22v-8.2h2.8l.42-3.2H14.2V8.55c0-.93.26-1.56 1.6-1.56h1.7V4.13a22.8 22.8 0 0 0-2.48-.13c-2.46 0-4.14 1.5-4.14 4.25v2.36H8.1v3.2h2.78V22z"/></svg></i>Facebook</a>
+<a class="ctl" href="https://www.instagram.com/agrososteniblepiura/" target="_blank" rel="noopener noreferrer"><i class="ins"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6" fill="#fff"/></svg></i>Instagram</a>
+<a class="ctl" href="https://www.whatsapp.com/channel/0029VadwCGv0G0XhcVPNFn3I" target="_blank" rel="noopener noreferrer"><i class="wsp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35zM12.05 21.8a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88a9.88 9.88 0 0 1 9.88 9.89c0 5.45-4.43 9.88-9.88 9.88zm8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.59 5.94L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45c6.55 0 11.89-5.34 11.89-11.9 0-3.17-1.24-6.16-3.48-8.4z"/></svg></i>Canal de WhatsApp</a></div>
+</div>
+<div class="copy"><span>© 2026 CECASP Piura · Agricultura sostenible y resiliente al cambio climático</span><span>Datos de la estación vía DPS-Promatic · Fotos de la galería: Unsplash</span></div>
 </div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
 var FB_PAGE_URL="https://www.facebook.com/profile.php?id=61556795847342";  // dirección real de la página de Facebook (ej. https://www.facebook.com/NombrePagina)
-var C=["#b8862e","#3d7196","#2f7350","#c26a2e","#7c5a3a","#5d6a62"],CP=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSO","SO","OSO","O","ONO","NO","NNO"];
+var C=["#ffb347","#5ab4ff","#46d6a8","#ffc83d","#d9a066","#8fd8a8"],CP=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSO","SO","OSO","O","ONO","NO","NNO"];
 // [grupo, [[etiqueta, clave, unidad, nota]]]: todos los parámetros que envía la estación
 var G=[["Temperatura",[["Temperatura","temp","°C"],["Mínima del día","dmintemp","°C"],["Máxima del día","dmaxtemp","°C"]]],
 ["Humedad y presión",[["Humedad relativa","rh","%"],["Humedad mínima del día","dminrh","%"],["Humedad máxima del día","dmaxrh","%"],["Punto de rocío","dp","°C"],["Presión atmosférica","press","hPa"]]],
@@ -231,65 +546,229 @@ function big(l,v,u){return '<div class="hl">'+l+'</div><div class="hv">'+v+(u?'<
 function rng(lo,hi,v,u,a,b,g,k1,k2,k){var p=(lo!=null&&hi!=null&&hi>lo&&v!=null)?Math.min(100,Math.max(0,(v-lo)/(hi-lo)*100)):50;return '<div class="rb" style="background:'+g+'"><i style="left:'+p+'%"></i></div><div class="re"><span>'+a+'<b>'+fmt(k1,lo)+' '+u+'</b></span><span>'+b+'<b>'+fmt(k2,hi)+' '+u+'</b></span></div>'}
 function gau(v,max,l,r){return '<div class="gb"><i style="width:'+(v==null?0:Math.min(100,v/max*100))+'%"></i></div><div class="ge"><span>'+l+'</span><span>'+r+'</span></div>'}
 function compass(d){return '<svg viewBox="0 0 120 120" role="img" aria-label="Dirección del viento"><circle cx="60" cy="60" r="50" fill="none" stroke="var(--line)" stroke-width="3"/><g fill="var(--mute)" font-size="12" font-weight="600" text-anchor="middle"><text x="60" y="19">N</text><text x="105" y="64">E</text><text x="60" y="108">S</text><text x="15" y="64">O</text></g>'+(d==null?'':'<g transform="rotate('+d+' 60 60)"><path d="M60 24 L67 62 L60 56 L53 62 Z" fill="var(--cc)"/></g>')+'<circle cx="60" cy="60" r="4" fill="var(--ink)"/></svg>'}
-function todos(L){return [
- pc("Temperatura","t",C[0],big("Temperatura",fmt("temp",L.temp),"°C")+rng(L.dmintemp,L.dmaxtemp,L.temp,"°C","Mínima del día","Máxima del día","linear-gradient(90deg,#2a6fa8,#fec418,#d9480f)","dmintemp","dmaxtemp")),
- pc("Humedad y presión","h",C[1],big("Humedad relativa",fmt("rh",L.rh),"%")+rng(L.dminrh,L.dmaxrh,L.rh,"%","Mínima del día","Máxima del día","linear-gradient(90deg,#cfe3f3,#2a6fa8)","dminrh","dmaxrh")+'<div style="height:10px"></div>'+row("Punto de rocío",fv("dp",L.dp,"°C"))+row("Presión atmosférica",fv("press",L.press,"hPa"))),
- pc("Viento","w",C[2],'<div class="cmp">'+compass(L.wdir)+'<div>'+big("Velocidad media",fmt("was",L.was),"km/h")+'<p class="sh" style="margin:2px 0 0">Dirección '+fv("wdir",L.wdir)+'</p></div></div>'+row("Velocidad mínima",fv("wmins",L.wmins,"km/h"))+row("Ráfaga máxima",fv("wgust",L.wgust,"km/h"))+row("Ráfaga máxima del día",fv("dwgust",L.dwgust,"km/h"))+row("Constancia de la dirección",fmt("wdsd",L.wdsd))+gau(L.wdsd,14,"0 variable","14 constante")),
- pc("Sol y lluvia","s",C[3],big("Radiación solar",fmt("sun",L.sun),"W/m²")+'<div style="height:8px"></div>'+row("Lluvia del intervalo",fmt("rf",L.rf))+row("Lluvia del día",fmt("drf",L.drf))),
- pc("Suelo y hoja","g",C[4],big("Temperatura del suelo",fmt("soilt",L.soilt),"°C")+'<div style="height:8px"></div>'+row("Humedad del suelo",fv("soilw",L.soilw,"cb"))+gau(L.soilw,200,"0 muy mojado","200 muy seco")+row("Humedad de la hoja",fmt("leaf",L.leaf))+gau(L.leaf,15,"0 mojada","15 seca")),
- pc("Equipo","e",C[5],row("Voltaje de la batería",fv("vbatt",L.vbatt,"V")))].join("")}
-function hoy(A,L){var td=A.filter(function(r){return r.ts.slice(0,10)==L.ts.slice(0,10)}),v=function(k){return td.map(function(r){return r[k]}).filter(function(x){return x!=null})},pm=function(k,u){var a=v(k);return a.length?r1(avg(a))+" "+u:"–"};
- $("tnote").textContent="Máximas y mínimas: las envía la estación. Los promedios los calcula esta página con las "+td.length+" lecturas de hoy.";
- $("today").innerHTML=[pc("Temperatura","t",C[0],row("Máxima",fv("dmaxtemp",L.dmaxtemp,"°C"))+row("Mínima",fv("dmintemp",L.dmintemp,"°C"))+row("Promedio",pm("temp","°C"),"calculado")),
- pc("Humedad","h",C[1],row("Máxima",fv("dmaxrh",L.dmaxrh,"%"))+row("Mínima",fv("dminrh",L.dminrh,"%"))+row("Promedio",pm("rh","%"),"calculado")),
- pc("Viento","w",C[2],row("Ráfaga máxima del día",fv("dwgust",L.dwgust,"km/h"))+row("Promedio de velocidad",pm("was","km/h"),"calculado")),
- pc("Sol y lluvia","s",C[3],row("Lluvia del día",fmt("drf",L.drf))+row("Radiación máxima",v("sun").length?Math.max.apply(0,v("sun"))+" W/m²":"–","calculado"))].join("")}
+var GN=0;
+function cl(x){return x==null||isNaN(x)?0:Math.max(0,Math.min(1,x))}
+function n(v){return typeof v=="number"?v:null}
+function rumbo(d){return d==null?"":CP[Math.round(d/22.5)%16]}
+function ult24(A,L){var c=new Date(Date.parse(L.ts+":00Z")-864e5).toISOString().slice(0,16);return A.filter(function(r){return r.ts>c})}
+function spark(R,k,col,u){var R0=R.filter(function(r){return typeof r[k]=="number"}),v=R0.map(function(r){return r[k]});if(v.length<3)return "";
+ var w=300,h=130,mn=Math.min.apply(0,v),mx=Math.max.apply(0,v),d=(mx-mn)||1,id="sp"+(++GN),
+ l="M"+v.map(function(x,i){return (i/(v.length-1)*w).toFixed(1)+" "+(h-6-(x-mn)/d*(h-30)).toFixed(1)}).join(" L");
+ return '<div class="spk-w"><span class="spk-t">Últimas 24 h · '+fmt(k,mn)+' a '+fmt(k,mx)+' '+u+'</span><svg class="spk" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="'+id+'" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="'+col+'" stop-opacity=".5"/><stop offset="1" stop-color="'+col+'" stop-opacity="0"/></linearGradient></defs>'+
+ '<path d="'+l+' L'+w+' '+h+' L0 '+h+' Z" fill="url(#'+id+')"/><path d="'+l+'" fill="none" stroke="'+col+'" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/></svg>'+
+ '<div class="spk-x"><span>'+dm(R0[0].ts)+'</span><span>'+dm(R0[R0.length-1].ts)+'</span></div></div>'}
+function suelo(v){return v==null?"":v<10?"Saturado":v<30?"Húmedo":v<60?"Moderado":v<100?"Seco":"Muy seco"}
+function hoja(v){return v==null?"":v<=5?"Mojada":v<=10?"Húmeda":"Seca"}
+// ---- cielo de la portada según la hora y el clima de la última lectura ----
+var RAYS=(function(){var t="";for(var i=0;i<8;i++){var a=i*Math.PI/4;t+='<line x1="'+(32+Math.cos(a)*19).toFixed(1)+'" y1="'+(32+Math.sin(a)*19).toFixed(1)+'" x2="'+(32+Math.cos(a)*27).toFixed(1)+'" y2="'+(32+Math.sin(a)*27).toFixed(1)+'"/>'}return t})();
+var NUBE='<path class="flt" d="M18 54h30a11 11 0 0 0 0-22 15 15 0 0 0-29-4A13 13 0 0 0 18 54z" fill="#fff"/>';
+var ICW={sol:'<svg viewBox="0 0 64 64"><g class="ray" stroke="#ffd447" stroke-width="4" stroke-linecap="round">'+RAYS+'</g><circle cx="32" cy="32" r="13" fill="#ffd447"/></svg>',
+ parcial:'<svg viewBox="0 0 64 64"><g transform="translate(10 -6) scale(.75)"><g class="ray" stroke="#ffd447" stroke-width="4" stroke-linecap="round">'+RAYS+'</g><circle cx="32" cy="32" r="13" fill="#ffd447"/></g>'+NUBE+'</svg>',
+ nube:'<svg viewBox="0 0 64 64"><path class="flt" d="M10 40h22a8 8 0 0 0 0-16 11 11 0 0 0-21-3A9 9 0 0 0 10 40z" fill="#dfe8ee" opacity=".8"/>'+NUBE+'</svg>',
+ lluvia:'<svg viewBox="0 0 64 64">'+NUBE.replace('M18 54','M18 44').replace('0 0 0-22','0 0 0-22')+'<g class="drp" stroke="#9fd3ff" stroke-width="3.5" stroke-linecap="round"><line x1="24" y1="50" x2="21" y2="58"/><line x1="34" y1="50" x2="31" y2="58"/><line x1="44" y1="50" x2="41" y2="58"/></g></svg>',
+ luna:'<svg viewBox="0 0 64 64"><path d="M40 10a22 22 0 1 0 14 36A18 18 0 0 1 40 10z" fill="#f6f1dc"/><circle cx="52" cy="14" r="1.6" fill="#fff"/><circle cx="12" cy="20" r="1.2" fill="#fff"/></svg>'};
+function horaNum(ts){return +ts.slice(11,13)+ts.slice(14,16)/60}
+function cielo(L){var h=horaNum(L.ts),f=h<5.5||h>=19?"noche":h<7.5?"alba":h<17?"dia":"tarde",sun=n(L.sun),rf=n(L.rf),
+ cs=Math.max(0,1050*Math.sin(Math.PI*(h-6)/12.5)),ra=cs>120&&sun!=null?sun/cs:null,
+ llueve=rf!=null&&rf>0,icon=llueve?"lluvia":f=="noche"?"luna":ra==null?"parcial":ra>.68?"sol":ra>.38?"parcial":"nube",
+ txt=llueve?"Lloviendo":f=="noche"?"Noche en el campo":ra==null?(f=="alba"?"Amanece":"Atardece"):ra>.68?"Soleado":ra>.38?"Parcialmente nublado":"Nublado",
+ nub=llueve?.95:f=="noche"?.35:ra==null?.45:ra>.68?.12:ra>.38?.55:.95,ex=[],t=n(L.temp),rh=n(L.rh),w=n(L.was);
+ if(t!=null){if(t>=32)ex.push("calor intenso");else if(t>=28)ex.push("caluroso");else if(t<=18)ex.push("fresco");else ex.push("templado")}
+ if(rh!=null){if(rh>=90)ex.push("aire muy húmedo");else if(rh<=40)ex.push("aire seco")}
+ if(w!=null&&w>=20)ex.push("ventoso");else if(w!=null&&w<3)ex.push("sin viento");
+ return {f:f,h:h,nub:nub,llueve:llueve,gris:f=="dia"&&ra!=null&&ra<=.38,icon:icon,txt:txt,ex:ex.join(" · ")}}
+function pill(ic,l,v){return '<div class="sx-pill"><svg viewBox="0 0 24 24">'+IC[ic]+'</svg><span>'+l+'</span><b>'+v+'</b></div>'}
+function lluvia(si){var r=$("rain");if(!si){r.innerHTML="";return}if(r.childElementCount)return;var h="";
+ for(var i=0;i<110;i++){var near=Math.random()<.25;h+='<b style="left:'+(Math.random()*115).toFixed(1)+'%;--l:'+(near?70+Math.random()*50:30+Math.random()*30).toFixed(0)+'px;--t:'+(near?.45+Math.random()*.2:.7+Math.random()*.4).toFixed(2)+'s;--dl:-'+(Math.random()*2).toFixed(2)+'s;opacity:'+(near?.9:.5)+'"></b>'}
+ r.innerHTML=h}
+function portada(L){var c=cielo(L),sx=$("sx"),o=$("orb"),p;
+ sx.className="sx "+c.f+(c.gris?" gris":"")+(c.llueve?" llueve":"");sx.style.setProperty("--haze",c.llueve?.75:c.gris?.6:c.f=="noche"?.3:c.f=="dia"?Math.max(.08,c.nub*.6):.35);lluvia(c.llueve);
+ if(c.f=="noche"){var hh=c.h<12?c.h+24:c.h;p=cl((hh-19)/10.5)}else p=cl((c.h-5.5)/13.5);
+ o.style.setProperty("--x",(c.f=="noche"?30+p*26:50+p*42).toFixed(1)+"%");o.style.setProperty("--y",(c.f=="noche"?24-Math.sin(Math.PI*p)*9:50-Math.sin(Math.PI*p)*36).toFixed(1)+"%");
+ var t=n(L.temp),tt=t==null?["–",""]:t.toFixed(1).split(".");
+ $("bigT").innerHTML=tt[0]+(tt[1]?"<small>."+tt[1]+"</small>":"")+"<sup>°C</sup>";
+ $("hAhora").textContent=dm(L.ts);
+ $("mmT").innerHTML='<span class="lo">↓ Mín <b>'+fmt("dmintemp",L.dmintemp)+'°</b></span><span class="hi">↑ Máx <b>'+fmt("dmaxtemp",L.dmaxtemp)+'°</b></span>';
+ $("condI").innerHTML=ICW[c.icon];$("cond").textContent=c.txt;$("condX").textContent=c.ex;
+ $("pills").innerHTML=pill("h","Humedad",fmt("rh",L.rh)+" %")+pill("w","Viento",fmt("was",L.was)+" km/h "+rumbo(n(L.wdir)))+pill("s","Sol",fmt("sun",L.sun)+" W/m²")}
+// ---- Última lectura: galería con transición de ruido ----
+// Adaptación sin React de morph-gallery.tsx: un solo pase de shader WebGL mezcla dos fotos
+// con un campo de ruido fbm, así la foto anterior se deshace en jirones en vez de fundirse.
+// Si el navegador no tiene WebGL, se usa un fundido normal entre fotos.
+// fotos libres de Unsplash (licencia Unsplash): termómetro, rocío, manga de viento, arcoíris sobre el campo, plántulas, paneles solares
+var MG_IMG=["https://images.unsplash.com/photo-1740560516658-5a94b0b715ed?w=1600&q=75&auto=format&fit=crop","https://images.unsplash.com/photo-1508256638959-56984bf03826?w=1600&q=75&auto=format&fit=crop","https://images.unsplash.com/photo-1590055531615-f16d36ffe8ec?w=1600&q=75&auto=format&fit=crop","https://images.unsplash.com/photo-1677552883603-0b29d6810db5?w=1600&q=75&auto=format&fit=crop","https://images.unsplash.com/photo-1457530378978-8bac673b8062?w=1600&q=75&auto=format&fit=crop","https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1600&q=75&auto=format&fit=crop"];
+var MG_VERT="attribute vec2 a_position;varying vec2 v_uv;void main(){v_uv=a_position*0.5+0.5;gl_Position=vec4(a_position,0.0,1.0);}";
+var MG_FRAG=["precision highp float;",
+"uniform sampler2D u_from;uniform sampler2D u_to;uniform float u_progress;uniform vec2 u_resolution;uniform float u_fromAspect;uniform float u_toAspect;",
+"uniform float u_scale;uniform float u_direction;uniform float u_edge;uniform float u_drift;varying vec2 v_uv;",
+"vec3 permute(vec3 x){return mod(((x*34.0)+1.0)*x,289.0);}",
+"float snoise(vec2 v){const vec4 C=vec4(0.211324865405187,0.366025403784439,-0.577350269189626,0.024390243902439);",
+" vec2 i=floor(v+dot(v,C.yy));vec2 x0=v-i+dot(i,C.xx);vec2 i1=(x0.x>x0.y)?vec2(1.0,0.0):vec2(0.0,1.0);",
+" vec4 x12=x0.xyxy+C.xxzz;x12.xy-=i1;i=mod(i,289.0);",
+" vec3 p=permute(permute(i.y+vec3(0.0,i1.y,1.0))+i.x+vec3(0.0,i1.x,1.0));",
+" vec3 m=max(0.5-vec3(dot(x0,x0),dot(x12.xy,x12.xy),dot(x12.zw,x12.zw)),0.0);m=m*m;m=m*m;",
+" vec3 x=2.0*fract(p*C.www)-1.0;vec3 h=abs(x)-0.5;vec3 ox=floor(x+0.5);vec3 a0=x-ox;",
+" m*=1.79284291400159-0.85373472095314*(a0*a0+h*h);vec3 g;g.x=a0.x*x0.x+h.x*x0.y;g.yz=a0.yz*x12.xz+h.yz*x12.yw;return 130.0*dot(m,g);}",
+"float fbm(vec2 v){float s=0.0;float a=0.5;for(int i=0;i<5;i++){s+=a*snoise(v);v*=2.0;a*=0.5;}return s;}",
+"vec2 mirror(vec2 uv){return 1.0-abs(1.0-mod(uv,2.0));}",
+"vec2 coverUV(vec2 uv,float ia){float ca=u_resolution.x/u_resolution.y;vec2 sc=(ca>ia)?vec2(1.0,ia/ca):vec2(ca/ia,1.0);return mirror((uv-0.5)*sc+0.5);}",
+"void main(){float adj=u_progress*(1.0+2.0*u_edge)-u_edge;",
+" float noise=fbm(v_uv*u_scale+vec2(0.0,u_progress*u_direction))*0.5+0.5;",
+" noise=smoothstep(0.0,2.0,length(texture2D(u_to,coverUV(v_uv,u_toAspect)).rgb)+noise);",
+" float mixF=1.0-smoothstep(adj-u_edge,adj+u_edge,noise);",
+" vec2 fUV=coverUV(v_uv+vec2(0.0,noise*u_progress*u_drift*u_direction),u_fromAspect);",
+" vec2 tUV=coverUV(v_uv+vec2(0.0,noise*(1.0-u_progress)*-0.5*u_drift*u_direction),u_toAspect);",
+" gl_FragColor=mix(texture2D(u_from,fUV),texture2D(u_to,tUV),mixF);}"].join("\n");
+function easeQ(t){t=Math.min(Math.max(t,0),1);return t<.5?16*t*t*t*t*t:1-Math.pow(-2*t+2,5)/2}
+function morph(el,srcs,o){var cv=el.querySelector("canvas"),fb=el.querySelector(".mg-fb"),n=srcs.length,active=0,failed=false,
+ red=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches,tex=[],asp=[],from=0,to=0,prog=1,t0=0,dir=1,running=false,U={},gl=null;
+ function fallback(){if(failed)return;failed=true;cv.style.display="none";
+  fb.innerHTML=srcs.map(function(s,i){return '<img src="'+s+'" alt="" class="'+(i==active?"on":"")+'">'}).join("")}
+ function pick(i){return tex[i]||tex.filter(Boolean)[0]}
+ function draw(){if(failed)return;if(prog<1){var sp=red?0:o.duration;prog=sp?easeQ((performance.now()-t0)/sp):1}
+  var a=pick(from),b=pick(to);if(!a||!b){running=false;return}
+  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,a);gl.uniform1i(U.from,0);
+  gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,b);gl.uniform1i(U.to,1);
+  gl.uniform1f(U.progress,prog);gl.uniform2f(U.resolution,cv.width,cv.height);gl.uniform1f(U.fromAspect,asp[from]||1);gl.uniform1f(U.toAspect,asp[to]||1);
+  gl.uniform1f(U.scale,o.noiseScale);gl.uniform1f(U.direction,dir);gl.uniform1f(U.edge,o.edge);gl.uniform1f(U.drift,o.drift);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  if(prog<1)requestAnimationFrame(draw);else running=false}
+ function kick(){if(!running){running=true;requestAnimationFrame(draw)}}
+ function resize(){if(failed||!gl)return;var d=Math.min(window.devicePixelRatio||1,2),w=Math.round(cv.clientWidth*d),h=Math.round(cv.clientHeight*d);
+  if(!w||!h||(cv.width==w&&cv.height==h))return;cv.width=w;cv.height=h;gl.viewport(0,0,w,h);kick()}
+ function show(k){if(k==active)return;var fwd=((k-active+n)%n)*2<=n;
+  if(failed){var im=fb.querySelectorAll("img");im[active].className="";im[k].className="on"}
+  else{from=active;to=k;prog=0;t0=performance.now();dir=fwd?1:-1;kick()}active=k}
+ try{gl=cv.getContext("webgl",{alpha:false,antialias:false})||cv.getContext("experimental-webgl")}catch(e){}
+ if(!gl){fallback();return {show:show}}
+ try{var mk=function(t,src){var sh=gl.createShader(t);gl.shaderSource(sh,src);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(sh);return sh},
+  pr=gl.createProgram(),vs=mk(gl.VERTEX_SHADER,MG_VERT),fs=mk(gl.FRAGMENT_SHADER,MG_FRAG);gl.attachShader(pr,vs);gl.attachShader(pr,fs);gl.linkProgram(pr);
+  gl.deleteShader(vs);gl.deleteShader(fs);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))throw gl.getProgramInfoLog(pr);gl.useProgram(pr);
+  gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+  var loc=gl.getAttribLocation(pr,"a_position");gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  ["from","to","progress","resolution","fromAspect","toAspect","scale","direction","edge","drift"].forEach(function(k){U[k]=gl.getUniformLocation(pr,"u_"+k)});
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true)}catch(e){fallback();return {show:show}}
+ cv.addEventListener("webglcontextlost",function(e){e.preventDefault();fallback()});
+ var malas=0,listo=false;
+ srcs.forEach(function(s,i){var im=new Image();im.crossOrigin="anonymous";im.decoding="async";
+  im.onload=function(){if(failed)return;try{var t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);
+   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+   tex[i]=t;asp[i]=im.naturalWidth/Math.max(im.naturalHeight,1)}catch(e){fallback();return}
+   if(!listo){listo=true;el.classList.add("ready");resize()}kick()};
+  im.onerror=function(){if(++malas==n)fallback()};im.src=s});
+ if(window.ResizeObserver)new ResizeObserver(resize).observe(cv);else window.addEventListener("resize",resize);
+ return {show:show}}
+var MGC=null,MGi=0,MGt=0,MGp=false,MG_AP=7000,MG_RED=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+function mgSched(){clearTimeout(MGt);return;MGt=setTimeout(function(){mgGo(MGi+1)},MG_AP)}
+function mgMark(){var n=6;[].forEach.call($("mgSlides").children,function(e,i){e.classList.toggle("on",i==MGi);e.setAttribute("aria-hidden",i!=MGi)});
+ [].forEach.call($("mgTabs").children,function(e,i){e.classList.remove("on");e.setAttribute("aria-selected",i==MGi);if(i==MGi){void e.offsetWidth;e.classList.add("on")}});
+ $("mgN").innerHTML="<b>0"+(MGi+1)+"</b> / 0"+n}
+function mgGo(k){k=((k%6)+6)%6;if(k==MGi)return;MGC.show(k);MGi=k;mgMark();mgSched()}
+function mgInit(){var el=$("mg"),x=null;MGC=morph(el,MG_IMG,{duration:1500,noiseScale:3.5,edge:.15,drift:.5});
+ $("mgTabs").style.setProperty("--ap",MG_AP+"ms");
+ el.querySelector(".prev").onclick=function(){mgGo(MGi-1)};el.querySelector(".next").onclick=function(){mgGo(MGi+1)};
+ $("mgTabs").addEventListener("click",function(e){var b=e.target.closest(".mg-tab");if(b)mgGo(+b.dataset.i)});
+ el.addEventListener("keydown",function(e){if(e.key=="ArrowLeft"){e.preventDefault();mgGo(MGi-1)}else if(e.key=="ArrowRight"){e.preventDefault();mgGo(MGi+1)}});
+ el.addEventListener("pointerdown",function(e){x=e.clientX});
+ el.addEventListener("pointerup",function(e){if(x==null)return;var d=e.clientX-x;x=null;if(Math.abs(d)>48)mgGo(MGi+(d<0?1:-1))});
+ var pa=function(v){return function(){MGp=v||document.hidden;mgSched()}};
+ el.addEventListener("mouseenter",pa(true));el.addEventListener("mouseleave",pa(false));el.addEventListener("focusin",pa(true));el.addEventListener("focusout",pa(false));
+ document.addEventListener("visibilitychange",pa(MGp));mgSched()}
+function mgSl(g,col,ic,big,unit,cap,panel){return '<div class="mg-sl" style="--cc:'+col+'" aria-hidden="true"><div><div class="mg-k an"><i><svg viewBox="0 0 24 24">'+IC[ic]+'</svg></i>'+g+'</div>'+
+ '<div class="mg-v an" style="--d:.08s">'+big+'<small>'+unit+'</small></div><p class="mg-c an" style="--d:.16s">'+cap+'</p></div><div class="mg-p an" style="--d:.26s">'+panel+'</div></div>'}
+function mgR(l,v){return '<div class="mg-r"><span>'+l+'</span><b>'+v+'</b></div>'}
+function mgTab(i,g,col,ic,v){return '<button class="mg-tab" type="button" role="tab" data-i="'+i+'" style="--cc:'+col+'"><i><svg viewBox="0 0 24 24">'+IC[ic]+'</svg></i><span>'+g+'</span><b>'+v+'</b></button>'}
+function mgData(L,A){var R=ult24(A,L),hoyN=A.filter(function(r){return r.ts.slice(0,10)==L.ts.slice(0,10)}).length,sw=n(L.soilw),lf=n(L.leaf),bat=n(L.vbatt),sun=n(L.sun),
+ tp=n(L.temp),pr=tp!=null&&n(L.dmintemp)!=null&&n(L.dmaxtemp)!=null&&L.dmaxtemp>L.dmintemp?cl((tp-L.dmintemp)/(L.dmaxtemp-L.dmintemp))*100:50,
+ solTx=sun==null?"Sin dato":sun<20?"Sin sol (noche)":sun<250?"Sol débil":sun<600?"Sol moderado":"Sol fuerte",
+ batTx=bat==null?"Sin dato":bat>=12.4?"Buena":bat>=11.8?"Regular":"Baja",
+ G=[["Temperatura","#ff9a4a","t",fmt("temp",L.temp),"°C","Temperatura del aire en el campo. La línea muestra cómo cambió en las últimas 24 horas.",
+   spark(R,"temp","#ff9a4a","°C")+'<div class="mg-bar"><i style="--w:'+pr.toFixed(0)+'%"></i></div>'+mgR("Mínima del día",fmt("dmintemp",L.dmintemp)+" °C")+mgR("Máxima del día",fmt("dmaxtemp",L.dmaxtemp)+" °C")],
+  ["Humedad","#5ab4ff","h",fmt("rh",L.rh),"%","Cuánto vapor de agua tiene el aire. Al 100 % el aire está saturado y se forma rocío o neblina.",
+   mgR("Mínima del día",fmt("dminrh",L.dminrh)+" %")+mgR("Máxima del día",fmt("dmaxrh",L.dmaxrh)+" %")+mgR("Punto de rocío",fv("dp",L.dp,"°C"))+mgR("Presión atmosférica",fv("press",L.press,"hPa"))],
+  ["Viento","#46d6a8","w",fmt("was",L.was),"km/h","Velocidad media del viento"+(L.wdir!=null?"; ahora viene del "+rumbo(L.wdir)+" ("+L.wdir+"°).":"."),
+   mgR("Dirección",fv("wdir",L.wdir))+mgR("Ráfaga máxima",fv("wgust",L.wgust,"km/h"))+mgR("Ráfaga máxima del día",fv("dwgust",L.dwgust,"km/h"))+mgR("Velocidad mínima",fv("wmins",L.wmins,"km/h"))+mgR("Constancia de la dirección",fmt("wdsd",L.wdsd)+' <em>/ 14</em>')],
+  ["Sol y lluvia","#ffc83d","s",fmt("sun",L.sun),"W/m²",solTx+". Es la energía del sol que llega al suelo; de noche vale 0.",
+   mgR("Estado",solTx)+mgR("Lluvia del intervalo",fmt("rf",L.rf))+mgR("Lluvia del día",fmt("drf",L.drf))],
+  ["Suelo y hoja","#d9a066","g",fmt("soilt",L.soilt),"°C","Temperatura del suelo donde crecen las raíces"+(sw!=null?". El suelo está "+suelo(sw).toLowerCase():"")+(lf!=null?" y la hoja, "+hoja(lf).toLowerCase()+".":"."),
+   mgR("Humedad del suelo",fv("soilw",L.soilw,"cb")+(sw==null?"":' <em>· '+suelo(sw)+'</em>'))+'<div class="mg-bar"><i style="--w:'+(sw==null?0:(1-cl(sw/200))*100).toFixed(0)+'%"></i></div>'+
+   mgR("Humedad de la hoja",fmt("leaf",L.leaf)+(lf==null?"":' <em>· '+hoja(lf)+'</em>'))+'<div class="mg-bar"><i style="--w:'+(lf==null?0:(1-cl(lf/15))*100).toFixed(0)+'%"></i></div>'],
+  ["Equipo","#8fd8a8","e",fmt("vbatt",L.vbatt),"V","Voltaje de la batería. La estación funciona con panel solar y batería; por debajo de 11 V deja de enviar datos.",
+   mgR("Estado de la batería",batTx)+'<div class="mg-bar"><i style="--w:'+(bat==null?0:cl((bat-11)/(14.4-11))*100).toFixed(0)+'%"></i></div>'+mgR("Lecturas recibidas hoy",hoyN+' <em>de 48</em>')+mgR("Última lectura",L.ts.slice(11)+" h")]];
+ $("mgSlides").innerHTML=G.map(function(g){return mgSl(g[0],g[1],g[2],g[3],g[4],g[5],g[6])}).join("");
+ $("mgTabs").innerHTML=G.map(function(g,i){return mgTab(i,g[0],g[1],g[2],g[3]+" "+g[4])}).join("");
+ if(!MGC)mgInit();mgMark()}
+function rsSpk(v,col){if(v.length<3)return "";var w=300,h=64,mn=Math.min.apply(0,v),mx=Math.max.apply(0,v),d=(mx-mn)||1,id="rs"+(++GN),
+ l="M"+v.map(function(x,i){return (i/(v.length-1)*w).toFixed(1)+" "+(h-4-(x-mn)/d*(h-12)).toFixed(1)}).join(" L");
+ return '<svg class="rs-spk" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="'+id+'" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="'+col+'" stop-opacity=".35"/><stop offset="1" stop-color="'+col+'" stop-opacity="0"/></linearGradient></defs><path d="'+l+' L'+w+' '+h+' L0 '+h+' Z" fill="url(#'+id+')"/><path d="'+l+'" fill="none" stroke="'+col+'" stroke-width="2.5" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>'}
+function hoy(A,L){var td=A.filter(function(r){return r.ts.slice(0,10)==L.ts.slice(0,10)}),v=function(k){return td.map(function(r){return r[k]}).filter(function(x){return typeof x=="number"})},
+ av=function(k){var a=v(k);return a.length?r1(avg(a)).toFixed(1):"–"},sun=v("sun"),hrs=sun.filter(function(x){return x>=120}).length*.5,dirs=v("wdir"),mode=null;
+ if(dirs.length){var c=[];for(var i=0;i<16;i++)c.push(0);dirs.forEach(function(d){c[Math.round(d/22.5)%16]++});mode=CP[c.indexOf(Math.max.apply(0,c))]}
+ $("tnote").textContent="Hoy, "+dm(L.ts).slice(0,5)+" · "+td.length+" de 48 lecturas recibidas. Las máximas y mínimas las envía la estación; los promedios los calcula esta página.";
+ function bar(lo,hi,a,b){if(lo==null||hi==null)return "";var q=function(x){return Math.max(0,Math.min(100,(x-a)/(b-a)*100))};return '<div class="rs-bar"><i style="left:'+q(lo).toFixed(1)+'%;right:'+(100-q(hi)).toFixed(1)+'%"></i></div>'}
+ function mm(a,b,u){return '<div class="rs-mm"><span>Mínima<b>'+a+u+'</b></span><span>Máxima<b>'+b+u+'</b></span></div>'}
+ function rw(l,x,h){return '<div class="rs-row"><span>'+l+(h?'<em>'+h+'</em>':'')+'</span><b>'+x+'</b></div>'}
+ function card(col,ic,t,tag,big,unit,lab,body,sv){return '<article class="rs" style="--cc:'+col+'"><div class="rs-h"><i><svg viewBox="0 0 24 24">'+IC[ic]+'</svg></i><h3>'+t+'</h3>'+(tag?'<em>'+tag+'</em>':'')+'</div><div class="rs-big"><b>'+big+'</b><small>'+unit+'</small><span>'+lab+'</span></div>'+body+rsSpk(sv,col)+'</article>'}
+ $("today").innerHTML=[
+  card("#ff9a4a","t","Temperatura","Aire",av("temp"),"°C","Promedio de hoy",bar(n(L.dmintemp),n(L.dmaxtemp),10,40)+mm(fmt("dmintemp",L.dmintemp),fmt("dmaxtemp",L.dmaxtemp)," °C"),v("temp")),
+  card("#5ab4ff","h","Humedad","Aire",av("rh"),"%","Promedio de hoy",bar(n(L.dminrh),n(L.dmaxrh),0,100)+mm(fmt("dminrh",L.dminrh),fmt("dmaxrh",L.dmaxrh)," %"),v("rh")),
+  card("#46d6a8","w","Viento","",av("was"),"km/h","Velocidad promedio",rw("Ráfaga máxima del día",fv("dwgust",L.dwgust,"km/h"))+rw("Dirección más frecuente",mode||"–","calculado"),v("was")),
+  card("#ffc83d","s","Sol y lluvia","",sun.length?Math.max.apply(0,sun):"–","W/m²","Radiación máxima",rw("Lluvia del día",fmt("drf",L.drf))+rw("Horas con sol (aprox.)",hrs.toFixed(1)+" h","calculado"),sun)].join("")}
 function latest(){datos().then(function(A){var L=A[A.length-1],m=Math.round((Date.now()-5*36e5-Date.parse(L.ts+":00Z"))/6e4);
- $("bigT").innerHTML=Number(L.temp).toFixed(1)+"<small>°C</small>";
- $("mm").textContent=L.dmaxtemp==null?"":"Máx. "+fmt("dmaxtemp",L.dmaxtemp)+" °C · Mín. "+fmt("dmintemp",L.dmintemp)+" °C hoy";
- $("cards").innerHTML=todos(L);$("lr").textContent="Datos de la estación del "+dm(L.ts).replace(" "," a las ")+".";hoy(A,L);
- $("estado").className=m>45?"pill late":"pill";
- $("estado").textContent=(m>45?"Sin lecturas nuevas. ":"")+"Última lectura: "+dm(L.ts)+" (hace "+m+" min)";
+ portada(L);
+ mgData(L,A);$("lr").textContent="Datos de la estación del "+dm(L.ts).replace(" "," a las ")+".";hoy(A,L);
+ $("estado").className=m>45?"live late":"live";
+ $("estado").textContent=(m>45?"Sin lecturas nuevas · ":"En vivo · ")+"última lectura "+dm(L.ts)+" (hace "+(m<120?m+" min":Math.round(m/60)+" h")+")";
 }).catch(function(){$("estado").textContent="Aún no hay datos para mostrar"})}
 var AV=null;
 function span(){var v=+per.value;if(!v||v>30)v=30;var b=AV?AV[1]:iso(new Date(Date.now()-5*36e5));return [iso(new Date(Date.parse(b)-(v-1)*864e5)),b]}
 function fillPer(A){AV=[A[0].ts.slice(0,10),A[A.length-1].ts.slice(0,10)]}
 function load(){datos().then(function(A){fillPer(A);var s=span();D=A.filter(function(r){var d=r.ts.slice(0,10);return d>=s[0]&&d<=s[1]});if($("parametros").classList.contains("on"))draw();table()}).catch(function(){})}
-function table(){$("th").innerHTML="<tr><th>Fecha y hora</th>"+TK.map(function(x){return "<th>"+x[0]+(x[2]?"<small>"+x[2]+"</small>":"")+"</th>"}).join("")+"</tr>";$("tb").innerHTML=D.slice(-60).reverse().map(function(r){return "<tr><td>"+dm(r.ts)+"</td>"+TK.map(function(x){var v=r[x[1]];return "<td>"+(v==null?"–":v)+"</td>"}).join("")+"</tr>"}).join("")}
-function ax(){var c=getComputedStyle(document.documentElement);return{t:c.getPropertyValue("--mute").trim(),g:c.getPropertyValue("--line").trim()}}
+function table(){var R=D.slice(-60).reverse(),HT={temp:"255,154,74",dmintemp:"90,180,255",dmaxtemp:"255,154,74",rh:"90,180,255",dp:"90,180,255",sun:"255,200,61",was:"70,214,168",wgust:"70,214,168",soilt:"217,160,102",vbatt:"143,216,168"},ex={},seen={};
+ TK.forEach(function(x){var a=R.map(function(r){return r[x[1]]}).filter(function(v){return typeof v=="number"});if(a.length)ex[x[1]]=[Math.min.apply(0,a),Math.max.apply(0,a)]});
+ $("th").innerHTML="<tr><th>Fecha y hora</th>"+TK.map(function(x){return "<th>"+x[0]+(x[2]?"<small>"+x[2]+"</small>":"")+"</th>"}).join("")+"</tr>";
+ $("tb").innerHTML=R.map(function(r){return "<tr><td>"+dm(r.ts)+"</td>"+TK.map(function(x){var k=x[1],v=r[k],e=ex[k],st="",cl="";
+  if(typeof v=="number"&&e&&e[1]>e[0]){if(HT[k])st=' style="background:rgba('+HT[k]+','+(.05+(v-e[0])/(e[1]-e[0])*.32).toFixed(2)+')"';
+   if(v==e[1]&&!seen[k+"x"]){cl=' class="mx"';seen[k+"x"]=1}else if(v==e[0]&&!seen[k+"n"]){cl=' class="mn"';seen[k+"n"]=1}}
+  return "<td"+st+cl+">"+(v==null?"–":v)+"</td>"}).join("")+"</tr>"}).join("")}
+function ax(){return{t:"#a9b8ae",g:"rgba(255,255,255,.07)"}}
+if(window.Chart){var CD=Chart.defaults;CD.font.family="Inter, system-ui, sans-serif";CD.font.size=12;CD.color="#a9b8ae";
+ CD.plugins.tooltip.backgroundColor="rgba(11,22,17,.95)";CD.plugins.tooltip.borderColor="rgba(255,255,255,.14)";CD.plugins.tooltip.borderWidth=1;CD.plugins.tooltip.padding=12;CD.plugins.tooltip.cornerRadius=10;
+ CD.plugins.tooltip.titleColor="#fff";CD.plugins.tooltip.bodyColor="#dbe3dd";CD.plugins.legend.labels.usePointStyle=true;CD.plugins.legend.labels.padding=16;CD.elements.line.borderWidth=2.5;CD.elements.point.hoverRadius=6}
+function grad(col){return function(x){var a=x.chart.chartArea;if(!a)return col+"22";var g=x.chart.ctx.createLinearGradient(0,a.top,0,a.bottom);g.addColorStop(0,col+"55");g.addColorStop(1,col+"00");return g}}
 function chips(a){$("stats").innerHTML=a.map(function(x){return "<span>"+x[0]+" <b>"+x[1]+"</b></span>"}).join("")}
 function avg(a){return a.reduce(function(x,y){return x+y},0)/a.length}
 function r1(x){return Math.round(x*10)/10}
 function make(cfg){try{chart=new Chart($("ch"),cfg)}catch(e){}}
-function opts(c,extra){var o={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:c.t}}},scales:{x:{ticks:{color:c.t,maxTicksLimit:10},grid:{color:c.g}},y:{ticks:{color:c.t},grid:{color:c.g}}}};for(var k in extra){if(k=="scales")for(var s in extra.scales)o.scales[s]=extra.scales[s];else o[k]=extra[k]}return o}
+function opts(c,extra){var o={responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{labels:{color:c.t}}},scales:{x:{ticks:{color:c.t,maxTicksLimit:10},grid:{color:c.g}},y:{ticks:{color:c.t},grid:{color:c.g}}}};for(var k in extra){if(k=="scales")for(var s in extra.scales)o.scales[s]=extra.scales[s];else o[k]=extra[k]}return o}
 function series(){var lab=[],prev=null,idx=[];D.forEach(function(r,i){var t=new Date(r.ts).getTime();if(prev&&t-prev>45*6e4){lab.push("");idx.push(null)}lab.push(per.value=="1"?r.ts.slice(11):dm(r.ts));idx.push(i);prev=t});return{lab:lab,idx:idx}}
 function line(key){var q=series();return q.idx.map(function(i){return i==null?null:D[i][key]})}
 var tk=0;
-function draw(){if(chart)chart.destroy();var k=kind.value,t=++tk;$("pw").hidden=k!="line";$("hint").textContent="";$("stats").innerHTML="";
+function draw(){if(window.ctSync)ctSync();if(chart)chart.destroy();var k=kind.value,t=++tk;$("pw").hidden=k!="line";$("hint").textContent="";$("stats").innerHTML="";
  if(k=="eto")return gEto(t);if(k=="etc")return gEtc(t);
  if(!D.length)return;
  ({line:gLine,daily:gDaily,dual:gDual,rose:gRose,rain:gRain})[k]()}
 function gLine(){var p=P[sel.value],c=ax(),v=D.map(function(r){return r[p[1]]}).filter(function(x){return x!=null}),u=p[3]?" "+p[3]:"",n=function(x){return r1(x)+u};
  $("hint").textContent=H[p[1]]||"";
  if(v.length)chips([["Máxima",n(Math.max.apply(0,v))],["Mínima",n(Math.min.apply(0,v))],["Promedio",n(avg(v))]]);
- make({type:"line",data:{labels:series().lab,datasets:[{label:p[0]+u,data:line(p[1]),borderColor:p[2],backgroundColor:p[2]+"22",fill:true,tension:.3,spanGaps:false,pointRadius:D.length>120?0:3}]},options:opts(c)})}
+ make({type:"line",data:{labels:series().lab,datasets:[{label:p[0]+u,data:line(p[1]),borderColor:p[2],backgroundColor:grad(p[2]),fill:true,tension:.35,spanGaps:false,pointRadius:D.length>120?0:2.5,pointBackgroundColor:p[2]}]},options:opts(c,{plugins:{legend:{display:false}}})})}
 function gDaily(){var m={},c=ax();D.forEach(function(r){(m[r.ts.slice(0,10)]=m[r.ts.slice(0,10)]||[]).push(r)});var k=Object.keys(m).sort(),mn=[],mx=[],av=[];
  k.forEach(function(d){var a=m[d],t=a.map(function(r){return r.temp}).filter(function(x){return x!=null}),lo=a.map(function(r){return r.dmintemp}).filter(function(x){return x!=null}),hi=a.map(function(r){return r.dmaxtemp}).filter(function(x){return x!=null});
   mn.push(Math.min.apply(0,lo.length?lo:t));mx.push(Math.max.apply(0,hi.length?hi:t));av.push(r1(avg(t)))});
  $("hint").textContent="Cada barra va de la temperatura mínima a la máxima del día; la línea es el promedio.";
  chips([["Máxima",r1(Math.max.apply(0,mx))+" °C"],["Mínima",r1(Math.min.apply(0,mn))+" °C"],["Promedio",r1(avg(av))+" °C"]]);
- make({data:{labels:k.map(function(d){return d.slice(8,10)+"/"+d.slice(5,7)}),datasets:[{type:"bar",label:"Mín–máx (°C)",data:k.map(function(d,i){return [mn[i],mx[i]]}),backgroundColor:"#fec41899",borderColor:"#c98a00",borderWidth:1,borderRadius:6},{type:"line",label:"Promedio (°C)",data:av,borderColor:"#1b7a45",backgroundColor:"#1b7a45",tension:.3,pointRadius:4}]},options:opts(c)})}
+ make({data:{labels:k.map(function(d){return d.slice(8,10)+"/"+d.slice(5,7)}),datasets:[{type:"bar",label:"Mín–máx (°C)",data:k.map(function(d,i){return [mn[i],mx[i]]}),backgroundColor:"#ffc83d88",borderColor:"#ffb347",borderWidth:1,borderRadius:6},{type:"line",label:"Promedio (°C)",data:av,borderColor:"#46d6a8",backgroundColor:"#46d6a8",tension:.3,pointRadius:4}]},options:opts(c)})}
 function gDual(){var c=ax();$("hint").textContent="Cuando sube la temperatura, la humedad relativa suele bajar.";
- make({type:"line",data:{labels:series().lab,datasets:[{label:"Temperatura (°C)",data:line("temp"),borderColor:"#c98a00",tension:.3,pointRadius:0,yAxisID:"y"},{label:"Humedad (%)",data:line("rh"),borderColor:"#2a6fa8",tension:.3,pointRadius:0,yAxisID:"y1"}]},options:opts(c,{scales:{y1:{position:"right",ticks:{color:c.t},grid:{drawOnChartArea:false}}}})})}
+ make({type:"line",data:{labels:series().lab,datasets:[{label:"Temperatura (°C)",data:line("temp"),borderColor:"#ffb347",tension:.3,pointRadius:0,yAxisID:"y"},{label:"Humedad (%)",data:line("rh"),borderColor:"#5ab4ff",tension:.3,pointRadius:0,yAxisID:"y1"}]},options:opts(c,{scales:{y1:{position:"right",ticks:{color:c.t},grid:{drawOnChartArea:false}}}})})}
 function gRose(){var c=ax(),N=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSO","SO","OSO","O","ONO","NO","NNO"],cnt=[],sp=[],tot=0,i;
  if(D[0].wdir===undefined){$("hint").textContent="Esta gráfica estará disponible en unos minutos, cuando se actualicen los datos.";return}
  for(i=0;i<16;i++){cnt.push(0);sp.push(0)}
  D.forEach(function(r){if(r.wdir==null)return;var j=Math.round(r.wdir/22.5)%16;cnt[j]++;sp[j]+=r.was||0;tot++});
  var pct=cnt.map(function(x){return tot?r1(x/tot*100):0}),top=pct.indexOf(Math.max.apply(0,pct));
  $("hint").textContent="Cada sector indica de dónde sopla el viento y qué porcentaje del tiempo.";chips([["Dirección más frecuente",N[top]+" ("+pct[top]+" %)"]]);
- make({type:"polarArea",data:{labels:N,datasets:[{data:pct,backgroundColor:"rgba(27,122,69,.55)",borderColor:"#1b7a45",borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(x){var j=x.dataIndex;return pct[j]+" % del tiempo · viento medio "+(cnt[j]?Math.round(sp[j]/cnt[j]):0)+" km/h"}}}},scales:{r:{startAngle:-11.25,ticks:{color:c.t,backdropColor:"transparent",callback:function(v){return v+" %"}},grid:{color:c.g},angleLines:{color:c.g},pointLabels:{display:true,centerPointLabels:true,color:c.t,font:{size:13}}}}}})}
+ make({type:"polarArea",data:{labels:N,datasets:[{data:pct,backgroundColor:"rgba(70,214,168,.4)",borderColor:"#46d6a8",borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(x){var j=x.dataIndex;return pct[j]+" % del tiempo · viento medio "+(cnt[j]?Math.round(sp[j]/cnt[j]):0)+" km/h"}}}},scales:{r:{startAngle:-11.25,ticks:{color:c.t,backdropColor:"transparent",callback:function(v){return v+" %"}},grid:{color:c.g},angleLines:{color:c.g},pointLabels:{display:true,centerPointLabels:true,color:c.t,font:{size:13}}}}}})}
 // ---- ETo y ETc diarias (data/diario.csv y data/etc_diaria.csv, calculadas por eto.py) ----
-var PO={s:[["1","Hoy"],["7","Últimos 7 días"],["30","Últimos 30 días"]],l:[["7","Últimos 7 días"],["30","Últimos 30 días"],["365","Último año"],["0","Todo el historial"]]},CC=["#1b7a45","#2a6fa8","#c98a00","#d9480f","#7c3aed","#0f766e","#b45309","#be185d","#52695c","#4d7c0f","#1d4ed8"];
+var PO={s:[["1","Hoy"],["7","Últimos 7 días"],["30","Últimos 30 días"]],l:[["7","Últimos 7 días"],["30","Últimos 30 días"],["365","Último año"],["0","Todo el historial"]]},CC=["#46d6a8","#5ab4ff","#ffb347","#ff7a59","#b794f6","#4fd1c5","#f6ad55","#f687b3","#a0aec0","#9ae6b4","#90cdf4"];
 function syncPer(){var k=kind.value,a=(k=="eto"||k=="etc")?PO.l:PO.s,cur=per.value,ok=a.some(function(x){return x[0]==cur});per.innerHTML=a.map(function(x){return "<option value="+x[0]+">"+x[1]+"</option>"}).join("");per.value=ok?cur:a[0][0]}
 var CA={};
 function csv(u){var c=CA[u];if(c&&Date.now()-c.t<6e5)return c.p;var p=fetch(u+"?t="+Math.floor(Date.now()/6e5)).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){var L=t.trim().split(/\r?\n/),h=L.shift().split(",");return L.filter(Boolean).map(function(l){var q=l.split(","),o={};h.forEach(function(k,i){o[k]=q[i]});return o})});CA[u]={t:Date.now(),p:p};p.catch(function(){delete CA[u]});return p}
@@ -300,7 +779,7 @@ function gEto(t){csv("data/diario.csv").then(function(A){if(t!=tk)return;var c=a
  var ok=R.filter(function(r){return r.completo=="True"}),tot=ok.reduce(function(a,r){return a+ +r.eto_mm},0),lg=R.length>60;
  $("hint").textContent="ETo: agua que pierde cada día un pasto bien regado (1 mm = 1 litro por m²), calculada con los datos de la estación (FAO-56 Penman-Monteith). Las barras claras son días con lecturas incompletas: el valor es menor al real y no se suma.";
  chips([["Promedio diario",ok.length?r1(tot/ok.length)+" mm":"–"],["Acumulado (solo días completos)",r1(tot)+" mm"],["Días completos",ok.length+" de "+R.length]]);
- make({type:"bar",data:{labels:R.map(function(r){return dlab(r.fecha,lg)}),datasets:[{label:"ETo (mm/día)",data:R.map(function(r){return +r.eto_mm}),backgroundColor:R.map(function(r){return r.completo=="True"?"#1b7a45cc":"#1b7a4544"}),borderRadius:lg?0:4}]},
+ make({type:"bar",data:{labels:R.map(function(r){return dlab(r.fecha,lg)}),datasets:[{label:"ETo (mm/día)",data:R.map(function(r){return +r.eto_mm}),backgroundColor:R.map(function(r){return r.completo=="True"?"#46d6a8cc":"#46d6a844"}),borderRadius:lg?0:4}]},
   options:opts(c,{plugins:{legend:{display:false},tooltip:{callbacks:{title:function(x){return R[x[0].dataIndex].fecha},label:function(x){var r=R[x.dataIndex];return r1(+r.eto_mm*10)/10+" mm/día"+(r.completo=="True"?"":" · día incompleto ("+r.lecturas+" de 48 lecturas)")}}}}})})
  }).catch(function(){if(t==tk)$("hint").textContent="No se pudieron cargar los datos diarios."})}
 function gEtc(t){csv("data/etc_diaria.csv").then(function(A){if(t!=tk)return;var c=ax(),R=win(A.filter(function(r){return r.etc_mm!==""&&r.etc_mm!=null}));
@@ -317,7 +796,7 @@ function gEtc(t){csv("data/etc_diaria.csv").then(function(A){if(t!=tk)return;var
  }).catch(function(){if(t==tk)$("hint").textContent="No se pudieron cargar los datos diarios."})}
 function gRain(){var m={},c=ax();D.forEach(function(r){var d=r.ts.slice(0,10);m[d]=Math.max(m[d]||0,r.drf||0)});var k=Object.keys(m).sort(),v=k.map(function(d){return m[d]});
  $("hint").textContent=Math.max.apply(0,v)>0?"Lluvia acumulada en cada día según el sensor de la estación.":"No se registró lluvia en este periodo.";chips([["Total del periodo",r1(v.reduce(function(a,b){return a+b},0))]]);
- make({type:"bar",data:{labels:k.map(function(d){return d.slice(8,10)+"/"+d.slice(5,7)}),datasets:[{label:"Lluvia por día",data:v,backgroundColor:"#2a6fa8bb",borderRadius:6}]},options:opts(c)})}
+ make({type:"bar",data:{labels:k.map(function(d){return d.slice(8,10)+"/"+d.slice(5,7)}),datasets:[{label:"Lluvia por día",data:v,backgroundColor:"#5ab4ffbb",borderRadius:6}]},options:opts(c)})}
 function social(el,nombre,url,ic,handle){el.innerHTML='<div class="fb-card"><span class="ic '+ic+'"><svg><use href="#i-'+ic+'"/></svg></span><b>'+handle+'</b><p>Mira nuestras publicaciones más recientes.</p><a class="btn" href="'+url+'" target="_blank" rel="noopener">Ver en '+nombre+'</a></div>'}
 var FBL="https://www.facebook.com/profile.php?id=61556795847342";
 function fb(){var el=$("fb"),w=Math.max(180,Math.min(500,el.clientWidth||320));
@@ -328,18 +807,31 @@ function fbShow(){if(FB_PAGE_URL)fb();else social($("fb"),"Facebook",FBL,"fb","F
 var mb=$("mb"),mn=$("menu");
 function cm(o){mn.classList.toggle("open",o);mb.setAttribute("aria-expanded",o);mb.setAttribute("aria-label",o?"Cerrar menú":"Abrir menú")}
 mb.addEventListener("click",function(e){e.stopPropagation();cm(!mn.classList.contains("open"))});
-mn.addEventListener("click",function(e){if(e.target.tagName=="A")cm(false)});
+mn.addEventListener("click",function(e){if(e.target.closest("a"))cm(false)});
 document.addEventListener("click",function(e){if(!mn.contains(e.target))cm(false)});
 addEventListener("keydown",function(e){if(e.key=="Escape")cm(false)});
-var V=["inicio","resumen","parametros","novedades","proyecto"];
+var V=["inicio","resumen","parametros","novedades"];
 function show(){var h=(location.hash||"#inicio").slice(1);if(h=="graficas")h="parametros";if(h=="datos")h="inicio";
  if(h=="contacto"&&document.querySelector(".view.on"))return;
- if(V.indexOf(h)<0)h="inicio";
+ var dest=null;if(V.indexOf(h)<0){var el=document.getElementById(h),vw=el&&el.closest(".view");if(vw){dest=el;h=vw.id}else h="inicio"}
  V.forEach(function(v){$(v).classList.toggle("on",v==h)});
  document.querySelectorAll("nav a[data-v]").forEach(function(a){a.classList.toggle("on",a.dataset.v==h)});
- if(h=="parametros")draw();if(h=="novedades")fbShow();scrollTo(0,0)}
+ if(h=="parametros")draw();if(h=="novedades")fbShow();if(dest)dest.scrollIntoView();else scrollTo(0,0)}
 addEventListener("hashchange",show);
 sel.addEventListener("change",draw);kind.addEventListener("change",function(){syncPer();load()});
+/* pestañas de tipo de gráfica y botones de periodo (manejan los mismos selectores de antes) */
+(function(){var IK={line:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',daily:'<path d="M3 3v18h18"/><path d="M7 16V9"/><path d="M12 16V5"/><path d="M17 16v-4"/>',dual:'<path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>',
+ rose:'<circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/>',rain:'<path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/><path d="M8 19v2"/><path d="M8 13v2"/><path d="M16 19v2"/><path d="M16 13v2"/><path d="M12 21v2"/><path d="M12 15v2"/>',
+ eto:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',etc:'<path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/>'},
+ SL={line:"Evolución",daily:"Temperatura diaria",dual:"Temp. y humedad",rose:"Rosa de vientos",rain:"Lluvia",eto:"ETo",etc:"ETc por cultivo"};
+ var ct=$("ctabs"),pc=$("pchips");
+ ct.innerHTML=[].map.call(kind.options,function(o){return '<button type="button" class="ctab" role="tab" data-k="'+o.value+'" title="'+o.text+'"><svg viewBox="0 0 24 24">'+(IK[o.value]||"")+'</svg><span>'+(SL[o.value]||o.text)+'</span></button>'}).join("");
+ ct.addEventListener("click",function(e){var b=e.target.closest(".ctab");if(!b||b.dataset.k==kind.value)return;kind.value=b.dataset.k;kind.dispatchEvent(new Event("change"))});
+ pc.addEventListener("click",function(e){var b=e.target.closest("button");if(!b||b.dataset.v==per.value)return;per.value=b.dataset.v;per.dispatchEvent(new Event("change"))});
+ window.ctSync=function(){[].forEach.call(ct.children,function(b){var on=b.dataset.k==kind.value;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
+  pc.innerHTML=[].map.call(per.options,function(o){return '<button type="button" role="radio" aria-checked="'+(o.value==per.value)+'" class="'+(o.value==per.value?"on":"")+'" data-v="'+o.value+'">'+o.text+'</button>'}).join("");
+  var k=kind.value,po=per.options[per.selectedIndex];$("ctitle").textContent=k=="line"&&sel.options[sel.selectedIndex]?sel.options[sel.selectedIndex].text:kind.options[kind.selectedIndex].text;
+  $("csub").textContent=po?po.text:""}})();
 per.addEventListener("change",load);
 if(window.matchMedia)window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
 syncPer();show();latest();load();setInterval(latest,300000);setInterval(load,300000);
