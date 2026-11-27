@@ -13,12 +13,13 @@ def main():
         with open("data/lecturas.csv", encoding="utf-8", newline="") as f:
             for r in csv.DictReader(f): filas[r["ts"]] = r
     antes, d = len(filas), desde
+    zona = A.zona_servidor()
     while d <= hasta:
         e = min(d + dt.timedelta(days=29), hasta)
         try:
-            texto = A.descargar(d, e)
+            texto = A.descargar(d, e, zona)
             n = 0
-            for r in A.leer_dps(texto):
+            for r in A.leer_dps(texto, zona):
                 if r["ts"] not in filas: filas[r["ts"]] = r; n += 1
             print(f"{d} a {e}: {n} lecturas nuevas")
         except (SystemExit, Exception) as err:
