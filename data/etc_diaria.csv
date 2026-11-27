@@ -335,7 +335,7 @@ fecha,id,cultivo,campo,dia_en_campo,etapa,kc,eto_mm,etc_mm,lamina_bruta_mm,compl
 2026-11-27,1,Berenjena,Campo Experimental 1,45,Desarrollo,0.806,0.41,0.33,0.37,False
 2026-11-27,4,Pepinillo,Campo Experimental 1,45,Media,1.0,0.41,0.41,0.46,False
 2026-11-27,5,Frijol,Campo Experimental 2,45,Media,1.05,0.41,0.43,0.48,False
-2026-11-27,6,Caupí,Campo Experimental 2,46,Media,1.15,0.41,0.47,0.52,False
-2026-11-27,9,Maní,Campo Experimental 3,46,Desarrollo,0.79,0.41,0.32,0.36,False
+2026-11-27,6,Caupí,Campo Experimental 2,46,Media,1.15,0.41,0.47,0.53,False
+2026-11-27,9,Maní,Campo Experimental 3,46,Desarrollo,0.79,0.41,0.33,0.36,False
 2026-11-27,10,Nabo,Campo Experimental 3,45,Media,1.1,0.41,0.45,0.5,False
 2026-11-27,13,Quinua,Campo Experimental 4,45,Desarrollo,0.787,0.41,0.32,0.36,False
